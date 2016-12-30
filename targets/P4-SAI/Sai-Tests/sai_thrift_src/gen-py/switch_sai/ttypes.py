@@ -16,6 +16,20 @@ except:
   fastbinary = None
 
 
+class sai_switch_attr:
+  SAI_SWITCH_ATTR_PORT_NUMBER = 0
+  SAI_SWITCH_ATTR_PORT_LIST = 1
+
+  _VALUES_TO_NAMES = {
+    0: "SAI_SWITCH_ATTR_PORT_NUMBER",
+    1: "SAI_SWITCH_ATTR_PORT_LIST",
+  }
+
+  _NAMES_TO_VALUES = {
+    "SAI_SWITCH_ATTR_PORT_NUMBER": 0,
+    "SAI_SWITCH_ATTR_PORT_LIST": 1,
+  }
+
 class sai_fdb_entry_attr:
   SAI_FDB_ENTRY_ATTR_TYPE = 0
   SAI_FDB_ENTRY_ATTR_PACKET_ACTION = 1
@@ -139,15 +153,18 @@ class sai_vlan_attr:
 class sai_port_attr:
   SAI_PORT_ATTR_BIND_MODE = 0
   SAI_PORT_ATTR_PORT_VLAN_ID = 1
+  SAI_PORT_ATTR_HW_LANE_LIST = 2
 
   _VALUES_TO_NAMES = {
     0: "SAI_PORT_ATTR_BIND_MODE",
     1: "SAI_PORT_ATTR_PORT_VLAN_ID",
+    2: "SAI_PORT_ATTR_HW_LANE_LIST",
   }
 
   _NAMES_TO_VALUES = {
     "SAI_PORT_ATTR_BIND_MODE": 0,
     "SAI_PORT_ATTR_PORT_VLAN_ID": 1,
+    "SAI_PORT_ATTR_HW_LANE_LIST": 2,
   }
 
 class sai_bridge_attr:

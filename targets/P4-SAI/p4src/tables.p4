@@ -123,7 +123,7 @@ table table_fdb { // TODO ask if can be melded into l3 interface table...
     	ethernet.dstAddr		   : exact;
         ingress_metadata.bridge_id : exact;
     }
-    actions {action_forward_set_outIfType;}
+    actions {action_set_egress_br_port;}
     size : FDB_TABLE_SIZE;
 }
 
@@ -174,17 +174,24 @@ table table_unknown_multicast{
 
 table table_egress_vbridge_STP {
     reads {
-        ingress_metadata.bridge_port : exact; //TODO maybe egress? who set br_port?
+        egress_metadata.bridge_port : exact; //TODO maybe egress? who set br_port?
     }
     actions {action_set_egress_stp_state; _drop;}
     //size : 1; // TODO
 }
 
+table table_egress_br_port {
+    reads {
+        egress_metadata.bridge_port : exact;
+    }
+    actions {action_forward_set_outIfType; _drop;}
+}
+
 table table_egress_vbridge {
     reads {
-        ingress_metadata.bridge_port : exact; //TODO maybe egress? who set br_port?
+        egress_metadata.out_if : exact; //TODO maybe egress? who set br_port?
     }
-    actions {action_set_vlan_tag_mode; _drop;}
+    actions {action_forward_vlan_tag; action_forward_set_outIfType; _drop;}
     //size : 1; // TODO
 }
 
@@ -206,7 +213,7 @@ table table_egress_vlan_filtering {
         ingress_metadata.vid    : exact;
         vlan : valid;
     }
-    actions{_drop; action_set_vlan_tag_mode; action_untag_vlan;_nop;} // Need untag??
+    actions{_drop; action_forward_vlan_tag; action_untag_vlan;_nop;} // Need untag??
 }
 
 

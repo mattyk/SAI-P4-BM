@@ -34,6 +34,11 @@ typedef i32 sai_thrift_port_stat_counter_t
 typedef i32 sai_thrift_queue_stat_counter_t
 typedef i32 sai_thrift_pg_stat_counter_t
 
+enum sai_switch_attr {
+    SAI_SWITCH_ATTR_PORT_NUMBER,
+    SAI_SWITCH_ATTR_PORT_LIST
+}
+
 enum sai_fdb_entry_attr {
     SAI_FDB_ENTRY_ATTR_TYPE,
     SAI_FDB_ENTRY_ATTR_PACKET_ACTION,
@@ -78,7 +83,8 @@ enum sai_vlan_attr {
 
 enum sai_port_attr {
     SAI_PORT_ATTR_BIND_MODE,
-    SAI_PORT_ATTR_PORT_VLAN_ID
+    SAI_PORT_ATTR_PORT_VLAN_ID,
+    SAI_PORT_ATTR_HW_LANE_LIST
 }
 
 enum sai_bridge_attr {
@@ -286,11 +292,11 @@ service switch_sai_rpc {
                              3: i32 number_of_counters);
     sai_thrift_status_t sai_thrift_clear_port_all_stats(1: sai_thrift_object_id_t port_id)
 
-    sai_thrift_status_t sai_thrift_create_port(1: list<sai_thrift_attribute_t> thrift_attr_list);
+    sai_thrift_object_id_t sai_thrift_create_port(1: list<sai_thrift_attribute_t> thrift_attr_list);
 
     //bridge API
-    sai_thrift_status_t sai_thrift_create_bridge(1: list<sai_thrift_attribute_t> thrift_attr_list);
-    sai_thrift_status_t sai_thrift_create_bridge_port(1: list<sai_thrift_attribute_t> thrift_attr_list);
+    sai_thrift_object_id_t sai_thrift_create_bridge(1: list<sai_thrift_attribute_t> thrift_attr_list);
+    sai_thrift_object_id_t sai_thrift_create_bridge_port(1: list<sai_thrift_attribute_t> thrift_attr_list);
 
     //fdb API
     sai_thrift_status_t sai_thrift_create_fdb_entry(1: sai_thrift_fdb_entry_t thrift_fdb_entry, 2: list<sai_thrift_attribute_t> thrift_attr_list);
@@ -348,7 +354,8 @@ service switch_sai_rpc {
     sai_thrift_status_t sai_thrift_remove_neighbor_entry(1: sai_thrift_neighbor_entry_t thrift_neighbor_entry);
 
     //switch API
-    sai_thrift_attribute_list_t sai_thrift_get_switch_attribute();
+    sai_thrift_object_id_t sai_thrift_create_switch(1: list<sai_thrift_attribute_t> thrift_attr_list);
+    sai_thrift_attribute_list_t sai_thrift_get_switch_attribute(1: list<sai_thrift_attribute_t> thrift_attr_list);
     sai_thrift_attribute_t sai_thrift_get_port_list_by_front_port();
     sai_thrift_object_id_t sai_thrift_get_cpu_port_id();
     sai_thrift_object_id_t sai_thrift_get_default_trap_group();

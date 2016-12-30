@@ -365,7 +365,7 @@ def sai_thrift_create_hostif_trap_group(client, queue_id, policer_id=None):
     trap_group_id = client.sai_thrift_create_hostif_trap_group(thrift_attr_list=attr_list)
     return trap_group_id
 
-def sai_thrift_create_port(client, vlan_id, bind_mode):
+def sai_thrift_create_port(client, vlan_id, bind_mode, hw_port):
     attr_list = []
     bind_attr_value = sai_thrift_attribute_value_t(s32=bind_mode)
     bind_attr = sai_thrift_attribute_t(id=sai_port_attr.SAI_PORT_ATTR_BIND_MODE, value=bind_attr_value)
@@ -373,6 +373,10 @@ def sai_thrift_create_port(client, vlan_id, bind_mode):
     vlan_attr_value = sai_thrift_attribute_value_t(u16=vlan_id)
     vlan_attr = sai_thrift_attribute_t(id=sai_port_attr.SAI_PORT_ATTR_PORT_VLAN_ID, value=vlan_attr_value)
     attr_list.append(vlan_attr)
+    hw_port_list = sai_thrift_u32_list_t(u32list=[hw_port], count=1)
+    hw_lane_attr_value = sai_thrift_attribute_value_t(u32list=hw_port_list)
+    hw_lane_attr = sai_thrift_attribute_t(id=sai_port_attr.SAI_PORT_ATTR_HW_LANE_LIST, value=hw_lane_attr_value)
+    attr_list.append(hw_lane_attr)
     return client.sai_thrift_create_port(thrift_attr_list=attr_list)
 
 def sai_thrift_create_policer(client, meter_type, mode, cir, red_action):
