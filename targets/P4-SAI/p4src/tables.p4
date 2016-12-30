@@ -11,19 +11,20 @@ table table_ingress_lag {
 
 table table_accepted_frame_type {
     reads {
-        ingress_metadata.l2_if : exact;
-        // ingress_metadata.is_tagged : exact;
+        vlan : valid;
     }
-    actions {action_set_pvid;}
-    //size : 1; // TODO
+    actions {action_set_packet_vid;}
 }
 
 table table_accepted_frame_type_default_internal {
     reads {
-        vlan : valid;
+        ingress_metadata.l2_if : exact;
+        // ingress_metadata.is_tagged : exact;
     }
-    actions {action_set_packet_vid; _drop;}
+    actions {action_set_pvid;_drop;}
+    //size : 1; // TODO
 }
+
 
 table table_ingress_l2_interface_type {
     reads {

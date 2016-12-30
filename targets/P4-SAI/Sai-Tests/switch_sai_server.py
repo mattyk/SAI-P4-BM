@@ -28,44 +28,58 @@ class SaiHandler:
     self.log = {}
     print "connecting to cli thrift"
     self.cli_client = SwitchThriftClient(json='../sai.json')
+    self.ports = []
     self.active_vlans = {}
+    self.vlan_oids = {}
     self.bridge_ports = []
-    self.bridge_id = 0
+    self.bridge_ids = []
 
-  def sai_thrift_create_vlan(self, vid):
+  def sai_thrift_create_vlan(self, thrift_attr_list):
+    for attr in thrift_attr_list:
+      if attr.id == sai_vlan_attr.SAI_VLAN_ATTR_VLAN_ID:
+        vid = attr.value.u16
     if vid in self.active_vlans:
       print "vlan id %d already exists" % vid
+      return -1
     else:
       print "vlan id %d created" % vid
+      vlan_oid = GetNewIndex(self.vlan_oids.keys())
+      self.vlan_oids.update({vlan_oid: vid})
       self.active_vlans.update({vid: []})
-    return 0
+      return vlan_oid
 
   def sai_thrift_create_fdb_entry(self, thrift_fdb_entry, thrift_attr_list):
     # fdb_entry = sai_thrift_fdb_entry_t(mac_address=mac, vlan_id=vlan_id)
     for attr in thrift_attr_list:
       if attr.id == sai_fdb_entry_attr.SAI_FDB_ENTRY_ATTR_TYPE:
         entry_type = attr.value.s32
-      elif attr.id == sai_fdb_entry_attr.SAI_FDB_ENTRY_ATTR_PORT_ID:
-        port = attr.value.oid
+      elif attr.id == sai_fdb_entry_attr.SAI_FDB_ENTRY_ATTR_BRIDGE_PORT_ID:
+        bridge_port = attr.value.oid
       elif attr.id == sai_fdb_entry_attr.SAI_FDB_ENTRY_ATTR_PACKET_ACTION:
         packet_action = attr.value.s32
-    out_if = port
+
+    bridge_type = thrift_fdb_entry.bridge_type
+    bridge_id = thrift_fdb_entry.bridge_id
+    mac = thrift_fdb_entry.mac_address
+    vlan_id = thrift_fdb_entry.vlan_id
     out_if_type = 0 # port_type (not lag or router). TODO: check how to do it with SAI
-    match_str = thrift_fdb_entry.mac_address + ' ' + str(self.bridge_id)
-    action_str = list_to_str([out_if, out_if_type])
+
+    match_str = thrift_fdb_entry.mac_address + ' ' + str(bridge_id)
+    action_str = list_to_str([bridge_port, out_if_type])
     if packet_action == sai_packet_action.SAI_PACKET_ACTION_FORWARD:
       if entry_type == sai_fdb_entry_type.SAI_FDB_ENTRY_TYPE_STATIC:
         self.cli_client.AddTable('table_fdb', 'action_forward_set_outIfType', match_str, action_str)
   	return 0
 
   def sai_thrift_delete_fdb_entry(self, thrift_fdb_entry):
-    match_str = thrift_fdb_entry.mac_address + ' ' + str(self.bridge_id)
+    match_str = thrift_fdb_entry.mac_address + ' ' + str(thrift_fdb_entry.bridge_id)
     print "RemoveTableEntry: %s" % match_str
     self.cli_client.RemoveTableEntry('table_fdb', match_str)
     return 0
 
-  def sai_thrift_delete_vlan(self, vlan_id):
-    self.active_vlans.pop(vlan_id, None)
+  def sai_thrift_delete_vlan(self, vlan_oid):
+    self.vlan_oids.remove(vlan_oid)
+    # self.active_vlans.pop(vlan_id, None)
     return 0
 
   def sai_thrift_remove_vlan_member(self, vlan_member_id):
@@ -80,40 +94,29 @@ class SaiHandler:
   	# sai_vlan_tagging_mode.SAI_VLAN_TAGGING_MODE_UNTAGGED
     for attr in vlan_member_attr_list:
       if attr.id == sai_vlan_member_attr.SAI_VLAN_MEMBER_ATTR_VLAN_ID:
-        vlan_id = attr.value.s32
-      elif attr.id == sai_vlan_member_attr.SAI_VLAN_MEMBER_ATTR_PORT_ID:
-        port_id = attr.value.oid
+        vlan_oid = attr.value.oid
+      elif attr.id == sai_vlan_member_attr.SAI_VLAN_MEMBER_ATTR_BRIDGE_PORT_ID:
+        bridge_id = attr.value.oid
       elif attr.id == sai_vlan_member_attr.SAI_VLAN_MEMBER_ATTR_VLAN_TAGGING_MODE:
         tagging_mode = attr.value.s32
     all_vlan_members = [item for sublist in self.active_vlans.values() for item in sublist]
     vlan_member_id = GetNewIndex(all_vlan_members)
-
+    vlan_id = self.vlan_oids[vlan_oid]
     self.active_vlans[vlan_id].append(vlan_member_id)
-    self.cli_client.AddTable('table_ingress_vlan_filtering','_nop',list_to_str([port_id, vlan_id]),'')
-
+    print "test1"
+    self.cli_client.AddTable('table_ingress_vlan_filtering','_nop',list_to_str([bridge_id, vlan_id]),'')
+    print "test2"
     if tagging_mode == sai_vlan_tagging_mode.SAI_VLAN_TAGGING_MODE_TAGGED:
       vlan_pcp = 0 
       vlan_cfi = 0
       self.cli_client.AddTable('table_egress_vlan_filtering','action_set_vlan_tag_mode',
-                               list_to_str([port_id, vlan_id, 0]), list_to_str([vlan_pcp, vlan_cfi]))
+                               list_to_str([bridge_id, vlan_id, 0]), list_to_str([vlan_pcp, vlan_cfi]))
     else:
       self.cli_client.AddTable('table_egress_vlan_filtering','_nop',
-                              list_to_str([port_id, vlan_id, 0]),'')
+                              list_to_str([bridge_id, vlan_id, 0]),'')
 
     self.cli_client.AddTable('table_egress_vlan_filtering','_nop',
-                              list_to_str([port_id, vlan_id, 1]),'')
-
-
-    # TODO - this needs to be somewhere else.
-    l2_if_type = 3   # 1Q Bridge, TODO: not part of SAI api??
-    br_port = GetNewIndex(self.bridge_ports)
-    self.bridge_ports.append(br_port)
-    self.cli_client.AddTable('table_ingress_l2_interface_type', 'action_set_l2_if_type',
-                             list_to_str([port_id, vlan_id]), list_to_str([l2_if_type, br_port]))
-    self.cli_client.AddTable('table_vbridge', 'action_set_bridge_id', str(br_port), str(self.bridge_id))
-
-    
-
+                              list_to_str([bridge_id, vlan_id, 1]),'')
     return vlan_member_id
 
   def sai_thrift_set_port_attribute(self, port, attr):
@@ -123,6 +126,52 @@ class SaiHandler:
     self.cli_client.AddTable('table_accepted_frame_type', 'action_set_pvid', str(port), str(vlan_id))
     return 0
 
+  def sai_thrift_create_bridge_port(self, thrift_attr_list):
+    for attr in thrift_attr_list:
+      if attr.id == sai_bridge_port_attr.SAI_BRIDGE_PORT_ATTR_VLAN_ID:
+        vlan_id = attr.value.s32
+      elif attr.id == sai_bridge_port_attr.SAI_BRIDGE_PORT_ATTR_BRIDGE_ID:
+        bridge_id = attr.value.s32
+      elif attr.id == sai_bridge_port_attr.SAI_BRIDGE_PORT_ATTR_TYPE:
+        bridge_port_type = attr.value.s32
+      elif attr.id == sai_bridge_port_attr.SAI_BRIDGE_PORT_ATTR_PORT_ID:
+        port_id = attr.value.s32
+    #TODO: Connect Thrift constants to P4 ?
+    if bridge_port_type == sai_bridge_port_type.SAI_BRIDGE_PORT_TYPE_SUB_PORT:
+      l2_if_type = 2  
+    elif bridge_port_type == sai_bridge_port_type.SAI_BRIDGE_PORT_TYPE_PORT:
+      l2_if_type = 3
+    br_port = GetNewIndex(self.bridge_ports)
+    self.bridge_ports.append(br_port)
+    self.cli_client.AddTable('table_ingress_l2_interface_type', 'action_set_l2_if_type',
+                             list_to_str([port_id, vlan_id]), list_to_str([l2_if_type, br_port]))
+    self.cli_client.AddTable('table_vbridge', 'action_set_bridge_id', str(br_port), str(bridge_id))
+    return br_port
+
+  def sai_thrift_create_bridge(self, thrift_attr_list):
+    for attr in thrift_attr_list:
+      if attr.id == sai_bridge_attr.SAI_BRIDGE_ATTR_TYPE:
+        bridge_type = attr.value.s32
+    # bridge_type = sai_bridge_type.SAI_BRIDGE_TYPE_1D
+    bridge_id = GetNewIndex(self.bridge_ids)
+    return bridge_id
+
+  def sai_thrift_create_port(self, thrift_attr_list):
+    for attr in thrift_attr_list:
+      if attr.id == sai_port_attr.SAI_PORT_ATTR_PORT_VLAN_ID:
+        vlan_id = attr.value.u16
+      elif attr.id == sai_port_attr.SAI_PORT_ATTR_BIND_MODE:
+        bind_mode = attr.value.s32
+    port = GetNewIndex(self.ports)
+    if port > 8:
+      print "ERROR: Maximum number of ports already created"
+      return -1 # TODO: exception
+    self.ports.append(port)
+    # TODO: Add support to ingress LAG.
+    print "create port (%d): vlan - %d" % (port, vlan_id)
+    self.cli_client.AddTable('table_ingress_lag', 'action_set_lag_l2if', str(port), list_to_str([0, 0,port]))
+    self.cli_client.AddTable('table_accepted_frame_type_default_internal', 'action_set_pvid', str(port), str(vlan_id))
+    return port
 
 handler = SaiHandler()
 processor = switch_sai_rpc.Processor(handler)

@@ -49,6 +49,27 @@ class Iface:
     """
     pass
 
+  def sai_thrift_create_port(self, thrift_attr_list):
+    """
+    Parameters:
+     - thrift_attr_list
+    """
+    pass
+
+  def sai_thrift_create_bridge(self, thrift_attr_list):
+    """
+    Parameters:
+     - thrift_attr_list
+    """
+    pass
+
+  def sai_thrift_create_bridge_port(self, thrift_attr_list):
+    """
+    Parameters:
+     - thrift_attr_list
+    """
+    pass
+
   def sai_thrift_create_fdb_entry(self, thrift_fdb_entry, thrift_attr_list):
     """
     Parameters:
@@ -71,10 +92,10 @@ class Iface:
     """
     pass
 
-  def sai_thrift_create_vlan(self, vlan_id):
+  def sai_thrift_create_vlan(self, thrift_attr_list):
     """
     Parameters:
-     - vlan_id
+     - thrift_attr_list
     """
     pass
 
@@ -686,6 +707,99 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "sai_thrift_clear_port_all_stats failed: unknown result");
 
+  def sai_thrift_create_port(self, thrift_attr_list):
+    """
+    Parameters:
+     - thrift_attr_list
+    """
+    self.send_sai_thrift_create_port(thrift_attr_list)
+    return self.recv_sai_thrift_create_port()
+
+  def send_sai_thrift_create_port(self, thrift_attr_list):
+    self._oprot.writeMessageBegin('sai_thrift_create_port', TMessageType.CALL, self._seqid)
+    args = sai_thrift_create_port_args()
+    args.thrift_attr_list = thrift_attr_list
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_sai_thrift_create_port(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = sai_thrift_create_port_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "sai_thrift_create_port failed: unknown result");
+
+  def sai_thrift_create_bridge(self, thrift_attr_list):
+    """
+    Parameters:
+     - thrift_attr_list
+    """
+    self.send_sai_thrift_create_bridge(thrift_attr_list)
+    return self.recv_sai_thrift_create_bridge()
+
+  def send_sai_thrift_create_bridge(self, thrift_attr_list):
+    self._oprot.writeMessageBegin('sai_thrift_create_bridge', TMessageType.CALL, self._seqid)
+    args = sai_thrift_create_bridge_args()
+    args.thrift_attr_list = thrift_attr_list
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_sai_thrift_create_bridge(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = sai_thrift_create_bridge_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "sai_thrift_create_bridge failed: unknown result");
+
+  def sai_thrift_create_bridge_port(self, thrift_attr_list):
+    """
+    Parameters:
+     - thrift_attr_list
+    """
+    self.send_sai_thrift_create_bridge_port(thrift_attr_list)
+    return self.recv_sai_thrift_create_bridge_port()
+
+  def send_sai_thrift_create_bridge_port(self, thrift_attr_list):
+    self._oprot.writeMessageBegin('sai_thrift_create_bridge_port', TMessageType.CALL, self._seqid)
+    args = sai_thrift_create_bridge_port_args()
+    args.thrift_attr_list = thrift_attr_list
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_sai_thrift_create_bridge_port(self):
+    iprot = self._iprot
+    (fname, mtype, rseqid) = iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(iprot)
+      iprot.readMessageEnd()
+      raise x
+    result = sai_thrift_create_bridge_port_result()
+    result.read(iprot)
+    iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "sai_thrift_create_bridge_port failed: unknown result");
+
   def sai_thrift_create_fdb_entry(self, thrift_fdb_entry, thrift_attr_list):
     """
     Parameters:
@@ -781,18 +895,18 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "sai_thrift_flush_fdb_entries failed: unknown result");
 
-  def sai_thrift_create_vlan(self, vlan_id):
+  def sai_thrift_create_vlan(self, thrift_attr_list):
     """
     Parameters:
-     - vlan_id
+     - thrift_attr_list
     """
-    self.send_sai_thrift_create_vlan(vlan_id)
+    self.send_sai_thrift_create_vlan(thrift_attr_list)
     return self.recv_sai_thrift_create_vlan()
 
-  def send_sai_thrift_create_vlan(self, vlan_id):
+  def send_sai_thrift_create_vlan(self, thrift_attr_list):
     self._oprot.writeMessageBegin('sai_thrift_create_vlan', TMessageType.CALL, self._seqid)
     args = sai_thrift_create_vlan_args()
-    args.vlan_id = vlan_id
+    args.thrift_attr_list = thrift_attr_list
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
@@ -2915,6 +3029,9 @@ class Processor(Iface, TProcessor):
     self._processMap["sai_thrift_get_port_attribute"] = Processor.process_sai_thrift_get_port_attribute
     self._processMap["sai_thrift_get_port_stats"] = Processor.process_sai_thrift_get_port_stats
     self._processMap["sai_thrift_clear_port_all_stats"] = Processor.process_sai_thrift_clear_port_all_stats
+    self._processMap["sai_thrift_create_port"] = Processor.process_sai_thrift_create_port
+    self._processMap["sai_thrift_create_bridge"] = Processor.process_sai_thrift_create_bridge
+    self._processMap["sai_thrift_create_bridge_port"] = Processor.process_sai_thrift_create_bridge_port
     self._processMap["sai_thrift_create_fdb_entry"] = Processor.process_sai_thrift_create_fdb_entry
     self._processMap["sai_thrift_delete_fdb_entry"] = Processor.process_sai_thrift_delete_fdb_entry
     self._processMap["sai_thrift_flush_fdb_entries"] = Processor.process_sai_thrift_flush_fdb_entries
@@ -3046,6 +3163,39 @@ class Processor(Iface, TProcessor):
     oprot.writeMessageEnd()
     oprot.trans.flush()
 
+  def process_sai_thrift_create_port(self, seqid, iprot, oprot):
+    args = sai_thrift_create_port_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = sai_thrift_create_port_result()
+    result.success = self._handler.sai_thrift_create_port(args.thrift_attr_list)
+    oprot.writeMessageBegin("sai_thrift_create_port", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_sai_thrift_create_bridge(self, seqid, iprot, oprot):
+    args = sai_thrift_create_bridge_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = sai_thrift_create_bridge_result()
+    result.success = self._handler.sai_thrift_create_bridge(args.thrift_attr_list)
+    oprot.writeMessageBegin("sai_thrift_create_bridge", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_sai_thrift_create_bridge_port(self, seqid, iprot, oprot):
+    args = sai_thrift_create_bridge_port_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = sai_thrift_create_bridge_port_result()
+    result.success = self._handler.sai_thrift_create_bridge_port(args.thrift_attr_list)
+    oprot.writeMessageBegin("sai_thrift_create_bridge_port", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
   def process_sai_thrift_create_fdb_entry(self, seqid, iprot, oprot):
     args = sai_thrift_create_fdb_entry_args()
     args.read(iprot)
@@ -3084,7 +3234,7 @@ class Processor(Iface, TProcessor):
     args.read(iprot)
     iprot.readMessageEnd()
     result = sai_thrift_create_vlan_result()
-    result.success = self._handler.sai_thrift_create_vlan(args.vlan_id)
+    result.success = self._handler.sai_thrift_create_vlan(args.thrift_attr_list)
     oprot.writeMessageBegin("sai_thrift_create_vlan", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
@@ -4403,6 +4553,420 @@ class sai_thrift_clear_port_all_stats_result:
   def __ne__(self, other):
     return not (self == other)
 
+class sai_thrift_create_port_args:
+  """
+  Attributes:
+   - thrift_attr_list
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'thrift_attr_list', (TType.STRUCT,(sai_thrift_attribute_t, sai_thrift_attribute_t.thrift_spec)), None, ), # 1
+  )
+
+  def __init__(self, thrift_attr_list=None,):
+    self.thrift_attr_list = thrift_attr_list
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.thrift_attr_list = []
+          (_etype52, _size49) = iprot.readListBegin()
+          for _i53 in xrange(_size49):
+            _elem54 = sai_thrift_attribute_t()
+            _elem54.read(iprot)
+            self.thrift_attr_list.append(_elem54)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('sai_thrift_create_port_args')
+    if self.thrift_attr_list is not None:
+      oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
+      for iter55 in self.thrift_attr_list:
+        iter55.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.thrift_attr_list)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class sai_thrift_create_port_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.I32, 'success', None, None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.I32:
+          self.success = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('sai_thrift_create_port_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.I32, 0)
+      oprot.writeI32(self.success)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class sai_thrift_create_bridge_args:
+  """
+  Attributes:
+   - thrift_attr_list
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'thrift_attr_list', (TType.STRUCT,(sai_thrift_attribute_t, sai_thrift_attribute_t.thrift_spec)), None, ), # 1
+  )
+
+  def __init__(self, thrift_attr_list=None,):
+    self.thrift_attr_list = thrift_attr_list
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.thrift_attr_list = []
+          (_etype59, _size56) = iprot.readListBegin()
+          for _i60 in xrange(_size56):
+            _elem61 = sai_thrift_attribute_t()
+            _elem61.read(iprot)
+            self.thrift_attr_list.append(_elem61)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('sai_thrift_create_bridge_args')
+    if self.thrift_attr_list is not None:
+      oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
+      for iter62 in self.thrift_attr_list:
+        iter62.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.thrift_attr_list)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class sai_thrift_create_bridge_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.I32, 'success', None, None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.I32:
+          self.success = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('sai_thrift_create_bridge_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.I32, 0)
+      oprot.writeI32(self.success)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class sai_thrift_create_bridge_port_args:
+  """
+  Attributes:
+   - thrift_attr_list
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'thrift_attr_list', (TType.STRUCT,(sai_thrift_attribute_t, sai_thrift_attribute_t.thrift_spec)), None, ), # 1
+  )
+
+  def __init__(self, thrift_attr_list=None,):
+    self.thrift_attr_list = thrift_attr_list
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.thrift_attr_list = []
+          (_etype66, _size63) = iprot.readListBegin()
+          for _i67 in xrange(_size63):
+            _elem68 = sai_thrift_attribute_t()
+            _elem68.read(iprot)
+            self.thrift_attr_list.append(_elem68)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('sai_thrift_create_bridge_port_args')
+    if self.thrift_attr_list is not None:
+      oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
+      for iter69 in self.thrift_attr_list:
+        iter69.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.thrift_attr_list)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class sai_thrift_create_bridge_port_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.I32, 'success', None, None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.I32:
+          self.success = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('sai_thrift_create_bridge_port_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.I32, 0)
+      oprot.writeI32(self.success)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.success)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
 class sai_thrift_create_fdb_entry_args:
   """
   Attributes:
@@ -4438,11 +5002,11 @@ class sai_thrift_create_fdb_entry_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype52, _size49) = iprot.readListBegin()
-          for _i53 in xrange(_size49):
-            _elem54 = sai_thrift_attribute_t()
-            _elem54.read(iprot)
-            self.thrift_attr_list.append(_elem54)
+          (_etype73, _size70) = iprot.readListBegin()
+          for _i74 in xrange(_size70):
+            _elem75 = sai_thrift_attribute_t()
+            _elem75.read(iprot)
+            self.thrift_attr_list.append(_elem75)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -4463,8 +5027,8 @@ class sai_thrift_create_fdb_entry_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 2)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter55 in self.thrift_attr_list:
-        iter55.write(oprot)
+      for iter76 in self.thrift_attr_list:
+        iter76.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -4711,11 +5275,11 @@ class sai_thrift_flush_fdb_entries_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype59, _size56) = iprot.readListBegin()
-          for _i60 in xrange(_size56):
-            _elem61 = sai_thrift_attribute_t()
-            _elem61.read(iprot)
-            self.thrift_attr_list.append(_elem61)
+          (_etype80, _size77) = iprot.readListBegin()
+          for _i81 in xrange(_size77):
+            _elem82 = sai_thrift_attribute_t()
+            _elem82.read(iprot)
+            self.thrift_attr_list.append(_elem82)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -4732,8 +5296,8 @@ class sai_thrift_flush_fdb_entries_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter62 in self.thrift_attr_list:
-        iter62.write(oprot)
+      for iter83 in self.thrift_attr_list:
+        iter83.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -4826,16 +5390,16 @@ class sai_thrift_flush_fdb_entries_result:
 class sai_thrift_create_vlan_args:
   """
   Attributes:
-   - vlan_id
+   - thrift_attr_list
   """
 
   thrift_spec = (
     None, # 0
-    (1, TType.I16, 'vlan_id', None, None, ), # 1
+    (1, TType.LIST, 'thrift_attr_list', (TType.STRUCT,(sai_thrift_attribute_t, sai_thrift_attribute_t.thrift_spec)), None, ), # 1
   )
 
-  def __init__(self, vlan_id=None,):
-    self.vlan_id = vlan_id
+  def __init__(self, thrift_attr_list=None,):
+    self.thrift_attr_list = thrift_attr_list
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -4847,8 +5411,14 @@ class sai_thrift_create_vlan_args:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.I16:
-          self.vlan_id = iprot.readI16();
+        if ftype == TType.LIST:
+          self.thrift_attr_list = []
+          (_etype87, _size84) = iprot.readListBegin()
+          for _i88 in xrange(_size84):
+            _elem89 = sai_thrift_attribute_t()
+            _elem89.read(iprot)
+            self.thrift_attr_list.append(_elem89)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -4861,9 +5431,12 @@ class sai_thrift_create_vlan_args:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('sai_thrift_create_vlan_args')
-    if self.vlan_id is not None:
-      oprot.writeFieldBegin('vlan_id', TType.I16, 1)
-      oprot.writeI16(self.vlan_id)
+    if self.thrift_attr_list is not None:
+      oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
+      for iter90 in self.thrift_attr_list:
+        iter90.write(oprot)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -4874,7 +5447,7 @@ class sai_thrift_create_vlan_args:
 
   def __hash__(self):
     value = 17
-    value = (value * 31) ^ hash(self.vlan_id)
+    value = (value * 31) ^ hash(self.thrift_attr_list)
     return value
 
   def __repr__(self):
@@ -4895,7 +5468,7 @@ class sai_thrift_create_vlan_result:
   """
 
   thrift_spec = (
-    (0, TType.I32, 'success', None, None, ), # 0
+    (0, TType.I64, 'success', None, None, ), # 0
   )
 
   def __init__(self, success=None,):
@@ -4911,8 +5484,8 @@ class sai_thrift_create_vlan_result:
       if ftype == TType.STOP:
         break
       if fid == 0:
-        if ftype == TType.I32:
-          self.success = iprot.readI32();
+        if ftype == TType.I64:
+          self.success = iprot.readI64();
         else:
           iprot.skip(ftype)
       else:
@@ -4926,8 +5499,8 @@ class sai_thrift_create_vlan_result:
       return
     oprot.writeStructBegin('sai_thrift_create_vlan_result')
     if self.success is not None:
-      oprot.writeFieldBegin('success', TType.I32, 0)
-      oprot.writeI32(self.success)
+      oprot.writeFieldBegin('success', TType.I64, 0)
+      oprot.writeI64(self.success)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -4960,7 +5533,7 @@ class sai_thrift_delete_vlan_args:
 
   thrift_spec = (
     None, # 0
-    (1, TType.I16, 'vlan_id', None, None, ), # 1
+    (1, TType.I64, 'vlan_id', None, None, ), # 1
   )
 
   def __init__(self, vlan_id=None,):
@@ -4976,8 +5549,8 @@ class sai_thrift_delete_vlan_args:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.I16:
-          self.vlan_id = iprot.readI16();
+        if ftype == TType.I64:
+          self.vlan_id = iprot.readI64();
         else:
           iprot.skip(ftype)
       else:
@@ -4991,8 +5564,8 @@ class sai_thrift_delete_vlan_args:
       return
     oprot.writeStructBegin('sai_thrift_delete_vlan_args')
     if self.vlan_id is not None:
-      oprot.writeFieldBegin('vlan_id', TType.I16, 1)
-      oprot.writeI16(self.vlan_id)
+      oprot.writeFieldBegin('vlan_id', TType.I64, 1)
+      oprot.writeI64(self.vlan_id)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -5118,10 +5691,10 @@ class sai_thrift_get_vlan_stats_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.counter_ids = []
-          (_etype66, _size63) = iprot.readListBegin()
-          for _i67 in xrange(_size63):
-            _elem68 = iprot.readI32();
-            self.counter_ids.append(_elem68)
+          (_etype94, _size91) = iprot.readListBegin()
+          for _i95 in xrange(_size91):
+            _elem96 = iprot.readI32();
+            self.counter_ids.append(_elem96)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -5147,8 +5720,8 @@ class sai_thrift_get_vlan_stats_args:
     if self.counter_ids is not None:
       oprot.writeFieldBegin('counter_ids', TType.LIST, 2)
       oprot.writeListBegin(TType.I32, len(self.counter_ids))
-      for iter69 in self.counter_ids:
-        oprot.writeI32(iter69)
+      for iter97 in self.counter_ids:
+        oprot.writeI32(iter97)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.number_of_counters is not None:
@@ -5205,10 +5778,10 @@ class sai_thrift_get_vlan_stats_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype73, _size70) = iprot.readListBegin()
-          for _i74 in xrange(_size70):
-            _elem75 = iprot.readI64();
-            self.success.append(_elem75)
+          (_etype101, _size98) = iprot.readListBegin()
+          for _i102 in xrange(_size98):
+            _elem103 = iprot.readI64();
+            self.success.append(_elem103)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -5225,8 +5798,8 @@ class sai_thrift_get_vlan_stats_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.I64, len(self.success))
-      for iter76 in self.success:
-        oprot.writeI64(iter76)
+      for iter104 in self.success:
+        oprot.writeI64(iter104)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -5278,11 +5851,11 @@ class sai_thrift_create_vlan_member_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype80, _size77) = iprot.readListBegin()
-          for _i81 in xrange(_size77):
-            _elem82 = sai_thrift_attribute_t()
-            _elem82.read(iprot)
-            self.thrift_attr_list.append(_elem82)
+          (_etype108, _size105) = iprot.readListBegin()
+          for _i109 in xrange(_size105):
+            _elem110 = sai_thrift_attribute_t()
+            _elem110.read(iprot)
+            self.thrift_attr_list.append(_elem110)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -5299,8 +5872,8 @@ class sai_thrift_create_vlan_member_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter83 in self.thrift_attr_list:
-        iter83.write(oprot)
+      for iter111 in self.thrift_attr_list:
+        iter111.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -5675,11 +6248,11 @@ class sai_thrift_create_virtual_router_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype87, _size84) = iprot.readListBegin()
-          for _i88 in xrange(_size84):
-            _elem89 = sai_thrift_attribute_t()
-            _elem89.read(iprot)
-            self.thrift_attr_list.append(_elem89)
+          (_etype115, _size112) = iprot.readListBegin()
+          for _i116 in xrange(_size112):
+            _elem117 = sai_thrift_attribute_t()
+            _elem117.read(iprot)
+            self.thrift_attr_list.append(_elem117)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -5696,8 +6269,8 @@ class sai_thrift_create_virtual_router_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter90 in self.thrift_attr_list:
-        iter90.write(oprot)
+      for iter118 in self.thrift_attr_list:
+        iter118.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -5951,11 +6524,11 @@ class sai_thrift_create_route_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype94, _size91) = iprot.readListBegin()
-          for _i95 in xrange(_size91):
-            _elem96 = sai_thrift_attribute_t()
-            _elem96.read(iprot)
-            self.thrift_attr_list.append(_elem96)
+          (_etype122, _size119) = iprot.readListBegin()
+          for _i123 in xrange(_size119):
+            _elem124 = sai_thrift_attribute_t()
+            _elem124.read(iprot)
+            self.thrift_attr_list.append(_elem124)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -5976,8 +6549,8 @@ class sai_thrift_create_route_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 2)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter97 in self.thrift_attr_list:
-        iter97.write(oprot)
+      for iter125 in self.thrift_attr_list:
+        iter125.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -6224,11 +6797,11 @@ class sai_thrift_create_router_interface_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype101, _size98) = iprot.readListBegin()
-          for _i102 in xrange(_size98):
-            _elem103 = sai_thrift_attribute_t()
-            _elem103.read(iprot)
-            self.thrift_attr_list.append(_elem103)
+          (_etype129, _size126) = iprot.readListBegin()
+          for _i130 in xrange(_size126):
+            _elem131 = sai_thrift_attribute_t()
+            _elem131.read(iprot)
+            self.thrift_attr_list.append(_elem131)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -6245,8 +6818,8 @@ class sai_thrift_create_router_interface_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter104 in self.thrift_attr_list:
-        iter104.write(oprot)
+      for iter132 in self.thrift_attr_list:
+        iter132.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -6491,11 +7064,11 @@ class sai_thrift_create_next_hop_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype108, _size105) = iprot.readListBegin()
-          for _i109 in xrange(_size105):
-            _elem110 = sai_thrift_attribute_t()
-            _elem110.read(iprot)
-            self.thrift_attr_list.append(_elem110)
+          (_etype136, _size133) = iprot.readListBegin()
+          for _i137 in xrange(_size133):
+            _elem138 = sai_thrift_attribute_t()
+            _elem138.read(iprot)
+            self.thrift_attr_list.append(_elem138)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -6512,8 +7085,8 @@ class sai_thrift_create_next_hop_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter111 in self.thrift_attr_list:
-        iter111.write(oprot)
+      for iter139 in self.thrift_attr_list:
+        iter139.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -6758,11 +7331,11 @@ class sai_thrift_create_next_hop_group_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype115, _size112) = iprot.readListBegin()
-          for _i116 in xrange(_size112):
-            _elem117 = sai_thrift_attribute_t()
-            _elem117.read(iprot)
-            self.thrift_attr_list.append(_elem117)
+          (_etype143, _size140) = iprot.readListBegin()
+          for _i144 in xrange(_size140):
+            _elem145 = sai_thrift_attribute_t()
+            _elem145.read(iprot)
+            self.thrift_attr_list.append(_elem145)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -6779,8 +7352,8 @@ class sai_thrift_create_next_hop_group_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter118 in self.thrift_attr_list:
-        iter118.write(oprot)
+      for iter146 in self.thrift_attr_list:
+        iter146.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7033,10 +7606,10 @@ class sai_thrift_add_next_hop_to_group_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.thrift_nexthops = []
-          (_etype122, _size119) = iprot.readListBegin()
-          for _i123 in xrange(_size119):
-            _elem124 = iprot.readI64();
-            self.thrift_nexthops.append(_elem124)
+          (_etype150, _size147) = iprot.readListBegin()
+          for _i151 in xrange(_size147):
+            _elem152 = iprot.readI64();
+            self.thrift_nexthops.append(_elem152)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7057,8 +7630,8 @@ class sai_thrift_add_next_hop_to_group_args:
     if self.thrift_nexthops is not None:
       oprot.writeFieldBegin('thrift_nexthops', TType.LIST, 2)
       oprot.writeListBegin(TType.I64, len(self.thrift_nexthops))
-      for iter125 in self.thrift_nexthops:
-        oprot.writeI64(iter125)
+      for iter153 in self.thrift_nexthops:
+        oprot.writeI64(iter153)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7183,10 +7756,10 @@ class sai_thrift_remove_next_hop_from_group_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.thrift_nexthops = []
-          (_etype129, _size126) = iprot.readListBegin()
-          for _i130 in xrange(_size126):
-            _elem131 = iprot.readI64();
-            self.thrift_nexthops.append(_elem131)
+          (_etype157, _size154) = iprot.readListBegin()
+          for _i158 in xrange(_size154):
+            _elem159 = iprot.readI64();
+            self.thrift_nexthops.append(_elem159)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7207,8 +7780,8 @@ class sai_thrift_remove_next_hop_from_group_args:
     if self.thrift_nexthops is not None:
       oprot.writeFieldBegin('thrift_nexthops', TType.LIST, 2)
       oprot.writeListBegin(TType.I64, len(self.thrift_nexthops))
-      for iter132 in self.thrift_nexthops:
-        oprot.writeI64(iter132)
+      for iter160 in self.thrift_nexthops:
+        oprot.writeI64(iter160)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7325,11 +7898,11 @@ class sai_thrift_create_lag_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype136, _size133) = iprot.readListBegin()
-          for _i137 in xrange(_size133):
-            _elem138 = sai_thrift_attribute_t()
-            _elem138.read(iprot)
-            self.thrift_attr_list.append(_elem138)
+          (_etype164, _size161) = iprot.readListBegin()
+          for _i165 in xrange(_size161):
+            _elem166 = sai_thrift_attribute_t()
+            _elem166.read(iprot)
+            self.thrift_attr_list.append(_elem166)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7346,8 +7919,8 @@ class sai_thrift_create_lag_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter139 in self.thrift_attr_list:
-        iter139.write(oprot)
+      for iter167 in self.thrift_attr_list:
+        iter167.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7592,11 +8165,11 @@ class sai_thrift_create_lag_member_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype143, _size140) = iprot.readListBegin()
-          for _i144 in xrange(_size140):
-            _elem145 = sai_thrift_attribute_t()
-            _elem145.read(iprot)
-            self.thrift_attr_list.append(_elem145)
+          (_etype171, _size168) = iprot.readListBegin()
+          for _i172 in xrange(_size168):
+            _elem173 = sai_thrift_attribute_t()
+            _elem173.read(iprot)
+            self.thrift_attr_list.append(_elem173)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7613,8 +8186,8 @@ class sai_thrift_create_lag_member_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter146 in self.thrift_attr_list:
-        iter146.write(oprot)
+      for iter174 in self.thrift_attr_list:
+        iter174.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7859,11 +8432,11 @@ class sai_thrift_create_stp_entry_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype150, _size147) = iprot.readListBegin()
-          for _i151 in xrange(_size147):
-            _elem152 = sai_thrift_attribute_t()
-            _elem152.read(iprot)
-            self.thrift_attr_list.append(_elem152)
+          (_etype178, _size175) = iprot.readListBegin()
+          for _i179 in xrange(_size175):
+            _elem180 = sai_thrift_attribute_t()
+            _elem180.read(iprot)
+            self.thrift_attr_list.append(_elem180)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7880,8 +8453,8 @@ class sai_thrift_create_stp_entry_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter153 in self.thrift_attr_list:
-        iter153.write(oprot)
+      for iter181 in self.thrift_attr_list:
+        iter181.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -8432,11 +9005,11 @@ class sai_thrift_create_neighbor_entry_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype157, _size154) = iprot.readListBegin()
-          for _i158 in xrange(_size154):
-            _elem159 = sai_thrift_attribute_t()
-            _elem159.read(iprot)
-            self.thrift_attr_list.append(_elem159)
+          (_etype185, _size182) = iprot.readListBegin()
+          for _i186 in xrange(_size182):
+            _elem187 = sai_thrift_attribute_t()
+            _elem187.read(iprot)
+            self.thrift_attr_list.append(_elem187)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -8457,8 +9030,8 @@ class sai_thrift_create_neighbor_entry_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 2)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter160 in self.thrift_attr_list:
-        iter160.write(oprot)
+      for iter188 in self.thrift_attr_list:
+        iter188.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -9516,11 +10089,11 @@ class sai_thrift_create_hostif_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype164, _size161) = iprot.readListBegin()
-          for _i165 in xrange(_size161):
-            _elem166 = sai_thrift_attribute_t()
-            _elem166.read(iprot)
-            self.thrift_attr_list.append(_elem166)
+          (_etype192, _size189) = iprot.readListBegin()
+          for _i193 in xrange(_size189):
+            _elem194 = sai_thrift_attribute_t()
+            _elem194.read(iprot)
+            self.thrift_attr_list.append(_elem194)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -9537,8 +10110,8 @@ class sai_thrift_create_hostif_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter167 in self.thrift_attr_list:
-        iter167.write(oprot)
+      for iter195 in self.thrift_attr_list:
+        iter195.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -9783,11 +10356,11 @@ class sai_thrift_create_hostif_trap_group_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype171, _size168) = iprot.readListBegin()
-          for _i172 in xrange(_size168):
-            _elem173 = sai_thrift_attribute_t()
-            _elem173.read(iprot)
-            self.thrift_attr_list.append(_elem173)
+          (_etype199, _size196) = iprot.readListBegin()
+          for _i200 in xrange(_size196):
+            _elem201 = sai_thrift_attribute_t()
+            _elem201.read(iprot)
+            self.thrift_attr_list.append(_elem201)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -9804,8 +10377,8 @@ class sai_thrift_create_hostif_trap_group_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter174 in self.thrift_attr_list:
-        iter174.write(oprot)
+      for iter202 in self.thrift_attr_list:
+        iter202.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -10050,11 +10623,11 @@ class sai_thrift_create_hostif_trap_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype178, _size175) = iprot.readListBegin()
-          for _i179 in xrange(_size175):
-            _elem180 = sai_thrift_attribute_t()
-            _elem180.read(iprot)
-            self.thrift_attr_list.append(_elem180)
+          (_etype206, _size203) = iprot.readListBegin()
+          for _i207 in xrange(_size203):
+            _elem208 = sai_thrift_attribute_t()
+            _elem208.read(iprot)
+            self.thrift_attr_list.append(_elem208)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -10071,8 +10644,8 @@ class sai_thrift_create_hostif_trap_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter181 in self.thrift_attr_list:
-        iter181.write(oprot)
+      for iter209 in self.thrift_attr_list:
+        iter209.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -10603,11 +11176,11 @@ class sai_thrift_create_acl_table_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype185, _size182) = iprot.readListBegin()
-          for _i186 in xrange(_size182):
-            _elem187 = sai_thrift_attribute_t()
-            _elem187.read(iprot)
-            self.thrift_attr_list.append(_elem187)
+          (_etype213, _size210) = iprot.readListBegin()
+          for _i214 in xrange(_size210):
+            _elem215 = sai_thrift_attribute_t()
+            _elem215.read(iprot)
+            self.thrift_attr_list.append(_elem215)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -10624,8 +11197,8 @@ class sai_thrift_create_acl_table_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter188 in self.thrift_attr_list:
-        iter188.write(oprot)
+      for iter216 in self.thrift_attr_list:
+        iter216.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -10870,11 +11443,11 @@ class sai_thrift_create_acl_entry_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype192, _size189) = iprot.readListBegin()
-          for _i193 in xrange(_size189):
-            _elem194 = sai_thrift_attribute_t()
-            _elem194.read(iprot)
-            self.thrift_attr_list.append(_elem194)
+          (_etype220, _size217) = iprot.readListBegin()
+          for _i221 in xrange(_size217):
+            _elem222 = sai_thrift_attribute_t()
+            _elem222.read(iprot)
+            self.thrift_attr_list.append(_elem222)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -10891,8 +11464,8 @@ class sai_thrift_create_acl_entry_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter195 in self.thrift_attr_list:
-        iter195.write(oprot)
+      for iter223 in self.thrift_attr_list:
+        iter223.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -11137,11 +11710,11 @@ class sai_thrift_create_acl_counter_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype199, _size196) = iprot.readListBegin()
-          for _i200 in xrange(_size196):
-            _elem201 = sai_thrift_attribute_t()
-            _elem201.read(iprot)
-            self.thrift_attr_list.append(_elem201)
+          (_etype227, _size224) = iprot.readListBegin()
+          for _i228 in xrange(_size224):
+            _elem229 = sai_thrift_attribute_t()
+            _elem229.read(iprot)
+            self.thrift_attr_list.append(_elem229)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -11158,8 +11731,8 @@ class sai_thrift_create_acl_counter_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter202 in self.thrift_attr_list:
-        iter202.write(oprot)
+      for iter230 in self.thrift_attr_list:
+        iter230.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -11412,10 +11985,10 @@ class sai_thrift_get_acl_counter_attribute_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.thrift_attr_ids = []
-          (_etype206, _size203) = iprot.readListBegin()
-          for _i207 in xrange(_size203):
-            _elem208 = iprot.readI32();
-            self.thrift_attr_ids.append(_elem208)
+          (_etype234, _size231) = iprot.readListBegin()
+          for _i235 in xrange(_size231):
+            _elem236 = iprot.readI32();
+            self.thrift_attr_ids.append(_elem236)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -11436,8 +12009,8 @@ class sai_thrift_get_acl_counter_attribute_args:
     if self.thrift_attr_ids is not None:
       oprot.writeFieldBegin('thrift_attr_ids', TType.LIST, 2)
       oprot.writeListBegin(TType.I32, len(self.thrift_attr_ids))
-      for iter209 in self.thrift_attr_ids:
-        oprot.writeI32(iter209)
+      for iter237 in self.thrift_attr_ids:
+        oprot.writeI32(iter237)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -11489,11 +12062,11 @@ class sai_thrift_get_acl_counter_attribute_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype213, _size210) = iprot.readListBegin()
-          for _i214 in xrange(_size210):
-            _elem215 = sai_thrift_attribute_value_t()
-            _elem215.read(iprot)
-            self.success.append(_elem215)
+          (_etype241, _size238) = iprot.readListBegin()
+          for _i242 in xrange(_size238):
+            _elem243 = sai_thrift_attribute_value_t()
+            _elem243.read(iprot)
+            self.success.append(_elem243)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -11510,8 +12083,8 @@ class sai_thrift_get_acl_counter_attribute_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter216 in self.success:
-        iter216.write(oprot)
+      for iter244 in self.success:
+        iter244.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -11563,11 +12136,11 @@ class sai_thrift_create_mirror_session_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype220, _size217) = iprot.readListBegin()
-          for _i221 in xrange(_size217):
-            _elem222 = sai_thrift_attribute_t()
-            _elem222.read(iprot)
-            self.thrift_attr_list.append(_elem222)
+          (_etype248, _size245) = iprot.readListBegin()
+          for _i249 in xrange(_size245):
+            _elem250 = sai_thrift_attribute_t()
+            _elem250.read(iprot)
+            self.thrift_attr_list.append(_elem250)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -11584,8 +12157,8 @@ class sai_thrift_create_mirror_session_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter223 in self.thrift_attr_list:
-        iter223.write(oprot)
+      for iter251 in self.thrift_attr_list:
+        iter251.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -11830,11 +12403,11 @@ class sai_thrift_create_policer_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype227, _size224) = iprot.readListBegin()
-          for _i228 in xrange(_size224):
-            _elem229 = sai_thrift_attribute_t()
-            _elem229.read(iprot)
-            self.thrift_attr_list.append(_elem229)
+          (_etype255, _size252) = iprot.readListBegin()
+          for _i256 in xrange(_size252):
+            _elem257 = sai_thrift_attribute_t()
+            _elem257.read(iprot)
+            self.thrift_attr_list.append(_elem257)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -11851,8 +12424,8 @@ class sai_thrift_create_policer_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter230 in self.thrift_attr_list:
-        iter230.write(oprot)
+      for iter258 in self.thrift_attr_list:
+        iter258.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -12105,10 +12678,10 @@ class sai_thrift_get_policer_stats_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.counter_ids = []
-          (_etype234, _size231) = iprot.readListBegin()
-          for _i235 in xrange(_size231):
-            _elem236 = iprot.readI32();
-            self.counter_ids.append(_elem236)
+          (_etype262, _size259) = iprot.readListBegin()
+          for _i263 in xrange(_size259):
+            _elem264 = iprot.readI32();
+            self.counter_ids.append(_elem264)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -12129,8 +12702,8 @@ class sai_thrift_get_policer_stats_args:
     if self.counter_ids is not None:
       oprot.writeFieldBegin('counter_ids', TType.LIST, 2)
       oprot.writeListBegin(TType.I32, len(self.counter_ids))
-      for iter237 in self.counter_ids:
-        oprot.writeI32(iter237)
+      for iter265 in self.counter_ids:
+        oprot.writeI32(iter265)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -12182,10 +12755,10 @@ class sai_thrift_get_policer_stats_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype241, _size238) = iprot.readListBegin()
-          for _i242 in xrange(_size238):
-            _elem243 = iprot.readI64();
-            self.success.append(_elem243)
+          (_etype269, _size266) = iprot.readListBegin()
+          for _i270 in xrange(_size266):
+            _elem271 = iprot.readI64();
+            self.success.append(_elem271)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -12202,8 +12775,8 @@ class sai_thrift_get_policer_stats_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.I64, len(self.success))
-      for iter244 in self.success:
-        oprot.writeI64(iter244)
+      for iter272 in self.success:
+        oprot.writeI64(iter272)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -12255,11 +12828,11 @@ class sai_thrift_create_scheduler_profile_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype248, _size245) = iprot.readListBegin()
-          for _i249 in xrange(_size245):
-            _elem250 = sai_thrift_attribute_t()
-            _elem250.read(iprot)
-            self.thrift_attr_list.append(_elem250)
+          (_etype276, _size273) = iprot.readListBegin()
+          for _i277 in xrange(_size273):
+            _elem278 = sai_thrift_attribute_t()
+            _elem278.read(iprot)
+            self.thrift_attr_list.append(_elem278)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -12276,8 +12849,8 @@ class sai_thrift_create_scheduler_profile_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter251 in self.thrift_attr_list:
-        iter251.write(oprot)
+      for iter279 in self.thrift_attr_list:
+        iter279.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -12533,10 +13106,10 @@ class sai_thrift_get_queue_stats_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.counter_ids = []
-          (_etype255, _size252) = iprot.readListBegin()
-          for _i256 in xrange(_size252):
-            _elem257 = iprot.readI32();
-            self.counter_ids.append(_elem257)
+          (_etype283, _size280) = iprot.readListBegin()
+          for _i284 in xrange(_size280):
+            _elem285 = iprot.readI32();
+            self.counter_ids.append(_elem285)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -12562,8 +13135,8 @@ class sai_thrift_get_queue_stats_args:
     if self.counter_ids is not None:
       oprot.writeFieldBegin('counter_ids', TType.LIST, 2)
       oprot.writeListBegin(TType.I32, len(self.counter_ids))
-      for iter258 in self.counter_ids:
-        oprot.writeI32(iter258)
+      for iter286 in self.counter_ids:
+        oprot.writeI32(iter286)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.number_of_counters is not None:
@@ -12620,10 +13193,10 @@ class sai_thrift_get_queue_stats_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype262, _size259) = iprot.readListBegin()
-          for _i263 in xrange(_size259):
-            _elem264 = iprot.readI64();
-            self.success.append(_elem264)
+          (_etype290, _size287) = iprot.readListBegin()
+          for _i291 in xrange(_size287):
+            _elem292 = iprot.readI64();
+            self.success.append(_elem292)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -12640,8 +13213,8 @@ class sai_thrift_get_queue_stats_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.I64, len(self.success))
-      for iter265 in self.success:
-        oprot.writeI64(iter265)
+      for iter293 in self.success:
+        oprot.writeI64(iter293)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -12704,10 +13277,10 @@ class sai_thrift_clear_queue_stats_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.counter_ids = []
-          (_etype269, _size266) = iprot.readListBegin()
-          for _i270 in xrange(_size266):
-            _elem271 = iprot.readI32();
-            self.counter_ids.append(_elem271)
+          (_etype297, _size294) = iprot.readListBegin()
+          for _i298 in xrange(_size294):
+            _elem299 = iprot.readI32();
+            self.counter_ids.append(_elem299)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -12733,8 +13306,8 @@ class sai_thrift_clear_queue_stats_args:
     if self.counter_ids is not None:
       oprot.writeFieldBegin('counter_ids', TType.LIST, 2)
       oprot.writeListBegin(TType.I32, len(self.counter_ids))
-      for iter272 in self.counter_ids:
-        oprot.writeI32(iter272)
+      for iter300 in self.counter_ids:
+        oprot.writeI32(iter300)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.number_of_counters is not None:
@@ -12999,11 +13572,11 @@ class sai_thrift_create_buffer_profile_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype276, _size273) = iprot.readListBegin()
-          for _i277 in xrange(_size273):
-            _elem278 = sai_thrift_attribute_t()
-            _elem278.read(iprot)
-            self.thrift_attr_list.append(_elem278)
+          (_etype304, _size301) = iprot.readListBegin()
+          for _i305 in xrange(_size301):
+            _elem306 = sai_thrift_attribute_t()
+            _elem306.read(iprot)
+            self.thrift_attr_list.append(_elem306)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -13020,8 +13593,8 @@ class sai_thrift_create_buffer_profile_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter279 in self.thrift_attr_list:
-        iter279.write(oprot)
+      for iter307 in self.thrift_attr_list:
+        iter307.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -13137,11 +13710,11 @@ class sai_thrift_create_pool_profile_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype283, _size280) = iprot.readListBegin()
-          for _i284 in xrange(_size280):
-            _elem285 = sai_thrift_attribute_t()
-            _elem285.read(iprot)
-            self.thrift_attr_list.append(_elem285)
+          (_etype311, _size308) = iprot.readListBegin()
+          for _i312 in xrange(_size308):
+            _elem313 = sai_thrift_attribute_t()
+            _elem313.read(iprot)
+            self.thrift_attr_list.append(_elem313)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -13158,8 +13731,8 @@ class sai_thrift_create_pool_profile_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter286 in self.thrift_attr_list:
-        iter286.write(oprot)
+      for iter314 in self.thrift_attr_list:
+        iter314.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -13429,10 +14002,10 @@ class sai_thrift_get_pg_stats_args:
       elif fid == 2:
         if ftype == TType.LIST:
           self.counter_ids = []
-          (_etype290, _size287) = iprot.readListBegin()
-          for _i291 in xrange(_size287):
-            _elem292 = iprot.readI32();
-            self.counter_ids.append(_elem292)
+          (_etype318, _size315) = iprot.readListBegin()
+          for _i319 in xrange(_size315):
+            _elem320 = iprot.readI32();
+            self.counter_ids.append(_elem320)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -13458,8 +14031,8 @@ class sai_thrift_get_pg_stats_args:
     if self.counter_ids is not None:
       oprot.writeFieldBegin('counter_ids', TType.LIST, 2)
       oprot.writeListBegin(TType.I32, len(self.counter_ids))
-      for iter293 in self.counter_ids:
-        oprot.writeI32(iter293)
+      for iter321 in self.counter_ids:
+        oprot.writeI32(iter321)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.number_of_counters is not None:
@@ -13516,10 +14089,10 @@ class sai_thrift_get_pg_stats_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype297, _size294) = iprot.readListBegin()
-          for _i298 in xrange(_size294):
-            _elem299 = iprot.readI64();
-            self.success.append(_elem299)
+          (_etype325, _size322) = iprot.readListBegin()
+          for _i326 in xrange(_size322):
+            _elem327 = iprot.readI64();
+            self.success.append(_elem327)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -13536,8 +14109,8 @@ class sai_thrift_get_pg_stats_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.I64, len(self.success))
-      for iter300 in self.success:
-        oprot.writeI64(iter300)
+      for iter328 in self.success:
+        oprot.writeI64(iter328)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -13589,11 +14162,11 @@ class sai_thrift_create_wred_profile_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype304, _size301) = iprot.readListBegin()
-          for _i305 in xrange(_size301):
-            _elem306 = sai_thrift_attribute_t()
-            _elem306.read(iprot)
-            self.thrift_attr_list.append(_elem306)
+          (_etype332, _size329) = iprot.readListBegin()
+          for _i333 in xrange(_size329):
+            _elem334 = sai_thrift_attribute_t()
+            _elem334.read(iprot)
+            self.thrift_attr_list.append(_elem334)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -13610,8 +14183,8 @@ class sai_thrift_create_wred_profile_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter307 in self.thrift_attr_list:
-        iter307.write(oprot)
+      for iter335 in self.thrift_attr_list:
+        iter335.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -13856,11 +14429,11 @@ class sai_thrift_create_qos_map_args:
       if fid == 1:
         if ftype == TType.LIST:
           self.thrift_attr_list = []
-          (_etype311, _size308) = iprot.readListBegin()
-          for _i312 in xrange(_size308):
-            _elem313 = sai_thrift_attribute_t()
-            _elem313.read(iprot)
-            self.thrift_attr_list.append(_elem313)
+          (_etype339, _size336) = iprot.readListBegin()
+          for _i340 in xrange(_size336):
+            _elem341 = sai_thrift_attribute_t()
+            _elem341.read(iprot)
+            self.thrift_attr_list.append(_elem341)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -13877,8 +14450,8 @@ class sai_thrift_create_qos_map_args:
     if self.thrift_attr_list is not None:
       oprot.writeFieldBegin('thrift_attr_list', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.thrift_attr_list))
-      for iter314 in self.thrift_attr_list:
-        iter314.write(oprot)
+      for iter342 in self.thrift_attr_list:
+        iter342.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
