@@ -8,9 +8,10 @@ class switch_metatdata{
 };
 
 class vlan_obj {
-	sai_object_id_t sai_object_id;
-	std::list<int> vlan_list;
-	sai_vlan_id_t vlan_id = *vlan_list;	//vlan members 
+  public:
+	 sai_object_id_t sai_object_id;
+	 std::list<int> vlan_list;
+	 sai_vlan_id_t vlan_id = *vlan_list;	//vlan members 
 //vid 
 
 };
