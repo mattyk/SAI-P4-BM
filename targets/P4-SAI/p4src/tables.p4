@@ -244,3 +244,63 @@ table table_egress_lag {
     actions {action_set_out_port; _drop;}
     //size : 1; // TODO
 }
+
+//-----------
+// router
+//-----------
+set_vrf
+
+ingress_metadata.vrf
+ingress_metadata.ingress_rif
+ingress_metadata.is_next_hop_group
+
+table table_ingress_vrf {
+    reads{
+        ingress_metadata.ingress_rif : exact;
+    }
+    actions {_drop;set_vrf;}
+}
+
+table table_router {
+    reads{
+        ipv4.dstAddr : lpm;
+        ingress_metadata.vrf : exact;
+    }
+    actions {_drop;set_next_hop_id;} //set_next_hop_group_id
+}
+
+table table_next_hop_group {
+    reads{
+        ingress_metadata.next_hop_group_id : exact;
+        ingress_metadata.ecmp_hash : exact;
+    }
+    actions {_drop;set_next_hop_id;}
+}
+
+table table_next_hop {
+    reads{
+        
+    }
+    actions {}
+}
+
+table table_erif_check_ttl {
+    reads{
+
+    }
+    actions {}
+}
+
+table table_neighbor {
+    reads{
+
+    }
+    actions {}
+}
+
+table table_egress_l3_if {
+    reads{
+
+    }
+    actions {}
+}

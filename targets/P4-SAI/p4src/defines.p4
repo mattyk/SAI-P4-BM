@@ -31,6 +31,12 @@
 #define STP_DISCARDING      0 // TODO
 #define TAG 				1 // TODO
 
+// L3 
+// L3_IF_TYPE
+#define L3_PORT 		    0x1
+#define L3_1D_BRIDGE 		0x2
+#define L3_1Q_BRIDGE 		0x3
+
 // OUT_IF TYPE
 #define OUT_IF_IS_PORT      0
 #define OUT_IF_IS_LAG 		1 // TODO

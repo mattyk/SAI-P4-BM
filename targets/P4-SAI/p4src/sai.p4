@@ -36,12 +36,19 @@ control ingress {
 		}
 
 		control_fdb();
+		control_egress_bridge();
 	}
 
 	// router
 	if (ingress_metadata.l2_if_type == L2_ROUTER_TYPE) { 
 		control_router_flow();
 	}
+
+	// Add another bridge flow - copy of tables again? :S
+	// if egress_metadata.erif_type == L3_1D_BRIDGE {
+	// }
+	// if egress_metadata.erif_type == L3_1Q_BRIDGE {
+	// }
 }
 
 control control_ingress_port{
@@ -78,7 +85,16 @@ control control_1q_bridge_flow{
 }
 
 control control_router_flow{
-	// TODO
+	apply(table_ingress_vrf);
+	apply(table_router);
+	if ingress_metadata.is_next_hop_group == 1 
+		apply(table_next_hop_group);
+	}
+	apply(table_next_hop);
+	apply(table_erif_check_ttl);
+	// apply(table_erif_check_mtu);
+	apply(table_neighbor);
+	apply(table_egress_l3_if);
 }
 
 control control_fdb{
@@ -109,7 +125,7 @@ control control_fdb{
 	}
 }
 
-control egress{
+control control_egress_bridge {
 	if(ingress_metadata.l2_if_type == L2_1D_BRIDGE){
 		apply(table_egress_vbridge_STP);
 	}
@@ -122,14 +138,13 @@ control egress{
 	if(ingress_metadata.l2_if_type == L2_1D_BRIDGE){
 		apply(table_egress_set_vlan);
 	}
-	apply(table_egress_vlan_tag);
+}
 
+control egress{
+	apply(table_egress_vlan_tag);
 	if (egress_metadata.out_if_type == OUT_IF_IS_LAG) { 
 		apply(table_lag_hash);
 		apply(table_egress_lag);
-	}
-	else if(egress_metadata.out_if == OUT_IF_IS_ROUTER){
-		control_1q_egress_uni_router();
 	}
 	//apply(egress_acl); // TODO
 	//if((egress_metadata.stp_state == STP_FORWARDING) and (egress_metadata.tag_mode == TAG) ){
