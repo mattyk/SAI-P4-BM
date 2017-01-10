@@ -1,20 +1,12 @@
 
 #include <iostream>
-#include <list>
-#include <algorithm>
 /// thrift sai server
 #include "../sai_thrift_src/gen-cpp/switch_sai_rpc.h"
-
+#include "sai_object.h"
 #include <thrift/server/TSimpleServer.h>
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TBufferTransports.h>
 #include <thrift/transport/TTransportUtils.h>
-#include "../../../../thrift_src/gen-cpp/bm/Standard.h"
-
-// thrift bm clinet
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/protocol/TMultiplexedProtocol.h>
-#include <thrift/transport/TSocket.h>
 
 //SAI
 #ifdef __cplusplus
@@ -34,12 +26,6 @@ extern "C" {
 #include <saimirror.h>
 #include <saistatus.h>
 
-// INTERNAL
-#include "switch_meta_data.h"
-
-
-
-
 using namespace std;
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -47,36 +33,30 @@ using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
 
 using boost::shared_ptr;
-using namespace bm_runtime::standard;
+//using namespace bm_runtime::standard;
 using namespace  ::switch_sai;
 
 // globals 
-const int bm_port = 9090;
 const int sai_port = 9092;
-const int32_t cxt_id =0;
+
+// move to separate file:
 
 class switch_sai_rpcHandler : virtual public switch_sai_rpcIf {
  public:
 
   ~switch_sai_rpcHandler() {
-  //deconstructor
-    transport->close();
-    cout << "BM clients closed\n";
+    // deconstructor
   }
-  switch_sai_rpcHandler():
-  //constructor pre initializations
-  socket(new TSocket("localhost", bm_port)),
-  transport(new TBufferedTransport(socket)),
-  bprotocol(new TBinaryProtocol(transport)),
-  protocol (new TMultiplexedProtocol(bprotocol, "standard")),
-  bm_client(protocol),
-  active_vlans{}
-      {
+  switch_sai_rpcHandler(){
   // initialization   
-    transport->open();
-    cout << "BM connection started\n"; 
+    sai_object sai;
   //
+  }
 
+  sai_object_id_t sai_thrift_create_switch(const std::vector<sai_thrift_attribute_t> & thrift_attr_list){
+    //TODO 
+    printf("sai_thrift_create_switch\n");
+    //return switch_metatdata_t->switch_id;
   }
 
   sai_thrift_status_t sai_thrift_set_port_attribute(const sai_thrift_object_id_t port_id, const sai_thrift_attribute_t& thrift_attr) {
@@ -117,20 +97,20 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf {
   sai_thrift_status_t sai_thrift_create_vlan(const sai_thrift_vlan_id_t vlan_id) {
   
   // Your implementation goes here
-    auto it = std::find_if( std::begin( active_vlans ),
-                            std::end( active_vlans ),
-                            vlan_id );
+  //   auto it = std::find_if( std::begin( active_vlans ),
+  //                           std::end( active_vlans ),
+  //                           vlan_id );
 
-    if ( myList.end() == it )
-    {
-        std::cout << "creating vlan" << std::endl;
-    }
-    else
-    {
-        const int pos = std::distance( myList.begin(), it ) + 1;
-        printf("vlan id %d already exists \n",vlan_id);
-    }
-  //  std::string table_name = "table_ingress_lag"; 
+  //   if ( myList.end() == it )
+  //   {
+  //       std::cout << "creating vlan" << std::endl;
+  //   }
+  //   else
+  //   {
+  //       const int pos = std::distance( myList.begin(), it ) + 1;
+  //       printf("vlan id %d already exists \n",vlan_id);
+  //   }
+  // //  std::string table_name = "table_ingress_lag"; 
   //  BmEntryHandle handle = 0;
   
   //  bm_client.bm_mt_delete_entry(cxt_id, table_name, handle);
@@ -474,14 +454,8 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf {
     printf("sai_thrift_remove_qos_map\n");
   }
 private:
-  boost::shared_ptr<TTransport> socket;
-  boost::shared_ptr<TTransport> transport;
-  boost::shared_ptr<TProtocol>  bprotocol;
-  boost::shared_ptr<TProtocol>  protocol;
-  std::list<sai_thrift_vlan_id_t> active_vlans;
 
-public:
-  StandardClient bm_client;
+  sai_object sai;
 };
 
 
