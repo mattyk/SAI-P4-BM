@@ -79,7 +79,7 @@ struct switch_metatdata_t{
 public:
   //sai_id_map_t sai_id_map; // TODO should come from higher hirarchy (for multiple switch config)
   Sai_obj switch_id(sai_id_map_t sai_id_map);
-  int hw_port_list [8] ={0,1,2,3,4,5,6,7};
+  sai_u32_list_t hw_port_list;
   port_id_map_t ports;
   bridge_port_id_map_t bridge_ports;
   bridge_id_map_t bridges;
