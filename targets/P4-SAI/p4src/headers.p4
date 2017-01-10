@@ -80,8 +80,6 @@ header_type ingress_metadata_t {
 	}
 }
 
-
-
 header_type egress_metadata_t {
 	fields {
 		bit 	out_if_type; 
@@ -93,4 +91,18 @@ header_type egress_metadata_t {
         bit<8>  bridge_port; //L2_BRIDGE_PORT_WDT 
     }
 }
+
+header_type router_metadata_t {
+    fields {
+        bit<32> vrf;
+        bit<32> ingress_rif;
+        bit is_next_hop_group;
+        bit<32> next_hop_group_id;
+        bit<32> next_hop_id;
+        bit ecmp_hash;
+        bit <32>egress_rif;
+        bit <32>nh_dst_ip;
+    }
+}
+
 

@@ -165,60 +165,68 @@ def sai_thrift_flush_fdb_by_vlan(client, vlan_id):
 def sai_thrift_create_virtual_router(client, v4_enabled, v6_enabled):
     #v4 enabled
     vr_attribute1_value = sai_thrift_attribute_value_t(booldata=v4_enabled)
-    vr_attribute1 = sai_thrift_attribute_t(id=SAI_VIRTUAL_ROUTER_ATTR_ADMIN_V4_STATE,
+    vr_attribute1 = sai_thrift_attribute_t(id=sai_virtual_router_attr.SAI_VIRTUAL_ROUTER_ATTR_ADMIN_V4_STATE,
                                            value=vr_attribute1_value)
     #v6 enabled
     vr_attribute2_value = sai_thrift_attribute_value_t(booldata=v6_enabled)
-    vr_attribute2 = sai_thrift_attribute_t(id=SAI_VIRTUAL_ROUTER_ATTR_ADMIN_V6_STATE,
+    vr_attribute2 = sai_thrift_attribute_t(id=sai_virtual_router_attr.SAI_VIRTUAL_ROUTER_ATTR_ADMIN_V6_STATE,
                                            value=vr_attribute2_value)
     vr_attr_list = [vr_attribute1, vr_attribute2]
     vr_id = client.sai_thrift_create_virtual_router(thrift_attr_list=vr_attr_list)
     return vr_id
 
-def sai_thrift_create_router_interface(client, vr_id, is_port, port_id, vlan_id, v4_enabled, v6_enabled, mac):
+def sai_thrift_create_router_interface(client, vr_id, if_type, port_id, vlan_id, v4_enabled, v6_enabled, mac):
     #vrf attribute
     rif_attr_list = []
     rif_attribute1_value = sai_thrift_attribute_value_t(oid=vr_id)
-    rif_attribute1 = sai_thrift_attribute_t(id=SAI_ROUTER_INTERFACE_ATTR_VIRTUAL_ROUTER_ID,
+    rif_attribute1 = sai_thrift_attribute_t(id=sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_VIRTUAL_ROUTER_ID,
                                             value=rif_attribute1_value)
+
     rif_attr_list.append(rif_attribute1)
-    if is_port:
-        #port type and port id
-        rif_attribute2_value = sai_thrift_attribute_value_t(s32=SAI_ROUTER_INTERFACE_TYPE_PORT)
-        rif_attribute2 = sai_thrift_attribute_t(id=SAI_ROUTER_INTERFACE_ATTR_TYPE,
+
+    rif_attribute2_value = sai_thrift_attribute_value_t(s32=if_type)
+    rif_attribute2 = sai_thrift_attribute_t(id=sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_TYPE,
                                                 value=rif_attribute2_value)
-        rif_attr_list.append(rif_attribute2)
+
+    if if_type == sai_router_interface_type.SAI_ROUTER_INTERFACE_TYPE_PORT:
         rif_attribute3_value = sai_thrift_attribute_value_t(oid=port_id)
-        rif_attribute3 = sai_thrift_attribute_t(id=SAI_ROUTER_INTERFACE_ATTR_PORT_ID,
-                                                value=rif_attribute3_value)
-        rif_attr_list.append(rif_attribute3)
-    else:
-        #vlan type and vlan id
-        rif_attribute2_value = sai_thrift_attribute_value_t(s32=SAI_ROUTER_INTERFACE_TYPE_VLAN)
-        rif_attribute2 = sai_thrift_attribute_t(id=SAI_ROUTER_INTERFACE_ATTR_TYPE,
-                                                value=rif_attribute2_value)
-        rif_attr_list.append(rif_attribute2)
-        rif_attribute3_value = sai_thrift_attribute_value_t(u16=vlan_id)
-        rif_attribute3 = sai_thrift_attribute_t(id=SAI_ROUTER_INTERFACE_ATTR_VLAN_ID,
+        rif_attribute3 = sai_thrift_attribute_t(id=sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_PORT_ID,
                                                 value=rif_attribute3_value)
         rif_attr_list.append(rif_attribute3)
 
-    #v4_enabled
-    rif_attribute4_value = sai_thrift_attribute_value_t(booldata=v4_enabled)
-    rif_attribute4 = sai_thrift_attribute_t(id=SAI_ROUTER_INTERFACE_ATTR_ADMIN_V4_STATE,
-                                            value=rif_attribute4_value)
-    rif_attr_list.append(rif_attribute4)
+    if if_type == sai_router_interface_type.SAI_ROUTER_INTERFACE_TYPE_VLAN:
+        rif_attribute3_value = sai_thrift_attribute_value_t(u16=vlan_id)
+        rif_attribute3 = sai_thrift_attribute_t(id=sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_VLAN_ID,
+                                                value=rif_attribute3_value)
+        rif_attr_list.append(rif_attribute3)
+
+    if if_type == sai_router_interface_type.SAI_ROUTER_INTERFACE_TYPE_SUB_PORT:
+        rif_attribute3_value = sai_thrift_attribute_value_t(u16=vlan_id)
+        rif_attribute3 = sai_thrift_attribute_t(id=sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_VLAN_ID,
+                                                value=rif_attribute3_value)
+        rif_attr_list.append(rif_attribute3)
+        rif_attribute4_value = sai_thrift_attribute_value_t(oid=port_id)
+        rif_attribute4 = sai_thrift_attribute_t(id=sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_PORT_ID,
+                                                value=rif_attribute4_value)
+        rif_attr_list.append(rif_attribute4)
+
     #v6_enabled
     rif_attribute5_value = sai_thrift_attribute_value_t(booldata=v6_enabled)
-    rif_attribute5 = sai_thrift_attribute_t(id=SAI_ROUTER_INTERFACE_ATTR_ADMIN_V6_STATE,
+    rif_attribute5 = sai_thrift_attribute_t(id=sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_ADMIN_V6_STATE,
                                             value=rif_attribute5_value)
     rif_attr_list.append(rif_attribute5)
 
+    #v4_enabled
+    rif_attribute6_value = sai_thrift_attribute_value_t(booldata=v4_enabled)
+    rif_attribute6 = sai_thrift_attribute_t(id=sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_ADMIN_V4_STATE,
+                                            value=rif_attribute6_value)
+    rif_attr_list.append(rif_attribute6)
+
     if mac:
-        rif_attribute6_value = sai_thrift_attribute_value_t(mac=mac)
-        rif_attribute6 = sai_thrift_attribute_t(id=SAI_ROUTER_INTERFACE_ATTR_SRC_MAC_ADDRESS,
-                                                value=rif_attribute6_value)
-        rif_attr_list.append(rif_attribute6)
+        rif_attribute7_value = sai_thrift_attribute_value_t(mac=mac)
+        rif_attribute7 = sai_thrift_attribute_t(id=sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_SRC_MAC_ADDRESS,
+                                                value=rif_attribute7_value)
+        rif_attr_list.append(rif_attribute7)
 
     rif_id = client.sai_thrift_create_router_interface(rif_attr_list)
     return rif_id

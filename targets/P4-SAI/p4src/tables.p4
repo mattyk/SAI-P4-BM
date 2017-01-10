@@ -248,59 +248,54 @@ table table_egress_lag {
 //-----------
 // router
 //-----------
-set_vrf
-
-ingress_metadata.vrf
-ingress_metadata.ingress_rif
-ingress_metadata.is_next_hop_group
-
 table table_ingress_vrf {
     reads{
-        ingress_metadata.ingress_rif : exact;
+        router_metadata.ingress_rif : exact;
     }
-    actions {_drop;set_vrf;}
+    actions {_drop;action_set_vrf;}
 }
 
 table table_router {
     reads{
         ipv4.dstAddr : lpm;
-        ingress_metadata.vrf : exact;
+        router_metadata.vrf : exact;
     }
-    actions {_drop;set_next_hop_id;} //set_next_hop_group_id
+    actions {_drop;action_set_next_hop_id;action_set_next_hop_group_id;}
 }
 
 table table_next_hop_group {
     reads{
-        ingress_metadata.next_hop_group_id : exact;
-        ingress_metadata.ecmp_hash : exact;
+        router_metadata.next_hop_group_id : exact;
+        router_metadata.ecmp_hash : exact;
     }
-    actions {_drop;set_next_hop_id;}
+    actions {_drop;action_set_next_hop_id;}
 }
 
 table table_next_hop {
     reads{
-        
+        router_metadata.next_hop_id : exact;
     }
-    actions {}
+    actions {action_set_egress_rif;_drop;}
 }
 
 table table_erif_check_ttl {
     reads{
-
+        ipv4.ttl : exact;
     }
-    actions {}
+    actions {_drop; action_reduce_ttl;}
 }
 
 table table_neighbor {
     reads{
-
+        router_metadata.egress_rif : exact;
+        router_metadata.nh_dst_ip : exact;
     }
-    actions {}
+    actions { action_set_dmac; _drop;} //trap_to_cpu
 }
 
 table table_egress_l3_if {
     reads{
-
+        router_metadata.egress_rif : exact;
     }
-    actions {}
+    actions {action_set_l2_header;}
 }

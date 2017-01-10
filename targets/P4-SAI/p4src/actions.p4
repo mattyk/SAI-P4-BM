@@ -126,3 +126,38 @@ action set_egr(in bit<6> egress_spec) {
 action action_set_mc_fdb_miss() {
 	no_op();
 }
+
+//-----------
+// router
+//-----------
+action action_set_vrf(in bit<32> vrf) {
+	modify_field(router_metadata.vrf, vrf);
+}
+
+action action_set_next_hop_id(in bit<32> next_hop_id) {
+	modify_field(router_metadata.next_hop_id, next_hop_id);
+	modify_field(router_metadata.is_next_hop_group, 0);
+}
+
+action action_set_next_hop_group_id(in bit<32> next_hop_group_id) {
+	modify_field(router_metadata.next_hop_group_id, next_hop_group_id);
+	modify_field(router_metadata.is_next_hop_group, 1);
+}
+
+action action_set_egress_rif(in bit<32> egress_rif, in bit<32> nh_dst_ip) {
+	modify_field(router_metadata.egress_rif, egress_rif);
+	modify_field(router_metadata.nh_dst_ip, nh_dst_ip);
+}
+
+action action_reduce_ttl() {
+	modify_field(ipv4.ttl, ipv4.ttl-1);
+}
+
+action action_set_dmac(in bit<48> DMAC) {
+	modify_field(ethernet.dstAddr, DMAC);
+}
+
+action action_set_l2_header(in bit<48> SMAC, in bit<12> vid) {
+	modify_field(ingress_metadata.vid, vid);
+	modify_field(ethernet.srcAddr, SMAC);
+}

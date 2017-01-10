@@ -20,12 +20,13 @@ header 		udp_t				udp;
 // metadata
 metadata 	ingress_metadata_t 	 ingress_metadata;
 metadata 	egress_metadata_t 	 egress_metadata;
+metadata 	router_metadata_t 	 router_metadata;
 
 control ingress {
 	// phy
 	control_ingress_port();
 	// dot1br 
-//	control_dot1br_ingress();
+	//	control_dot1br_ingress();
 
 	// bridging
 	if ((ingress_metadata.l2_if_type == L2_1Q_BRIDGE) or (ingress_metadata.l2_if_type == L2_1D_BRIDGE)) {
@@ -84,10 +85,10 @@ control control_1q_bridge_flow{
  	apply(table_xSTP);
 }
 
-control control_router_flow{
+control control_router_flow {
 	apply(table_ingress_vrf);
 	apply(table_router);
-	if ingress_metadata.is_next_hop_group == 1 
+	if (router_metadata.is_next_hop_group == 1) {
 		apply(table_next_hop_group);
 	}
 	apply(table_next_hop);
@@ -150,9 +151,5 @@ control egress{
 	//if((egress_metadata.stp_state == STP_FORWARDING) and (egress_metadata.tag_mode == TAG) ){
 		// TODO: go to egress
 	//}
-}
-
-control control_1q_egress_uni_router {
-
 }
 

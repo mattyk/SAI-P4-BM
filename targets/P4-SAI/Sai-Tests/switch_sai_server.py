@@ -85,6 +85,22 @@ class Bridge_obj(Sai_obj):
         self.bridge_type = bridge_type
 
 
+class Rif_obj(Sai_obj):
+    def __init__(self, id, rif_type=0, port_id = 0, vid = 1, smac = 0):
+        Sai_obj.__init__(self, id)
+        self.rif_type = rif_type
+        self.port_id = port_id
+        self.vid = vid
+        self.smac = smac
+
+
+class Vrf_obj(Sai_obj):
+    def __init__(self, id, v4_enabled=0, v6_enabled=0):
+        Sai_obj.__init__(self, id)
+        self.v4_enabled = v4_enabled
+        self.v6_enabled = v6_enabled
+
+
 class SaiHandler():
   def __init__(self):
     self.switch_id = 0
@@ -99,7 +115,10 @@ class SaiHandler():
     self.bridge_ids = {}
     self.lag_members = {}
     self.lags = {}
-
+    self.rifs = {}
+    self.vrfs = {}
+    self.nhops = {}
+    self.neighbors = {}
 
   def sai_thrift_create_switch(self, thrift_attr_list):
     return self.switch_id
@@ -129,7 +148,6 @@ class SaiHandler():
     bridge_id = thrift_fdb_entry.bridge_id
     mac = thrift_fdb_entry.mac_address
     vlan_id = thrift_fdb_entry.vlan_id
-    out_if_type = 0 # port_type (not lag or router). TODO: check how to do it with SAI
 
     match_str = thrift_fdb_entry.mac_address + ' ' + str(bridge_id)
     action_str = str(bridge_port)
@@ -347,6 +365,43 @@ class SaiHandler():
     self.cli_client.RemoveTableEntry('table_egress_br_port_to_if', str(br_port.id))
     return 0
 
+  def sai_thrift_create_router_interface(self, thrift_attr_list):
+    rif_id, rif = CreateNewItem(self.rifs, Rif_obj)
+    for attr in thrift_attr_list:
+      if attr.id == sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_VIRTUAL_ROUTER_ID:
+        vr_id = attr.value.oid
+      if attr.id == sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_TYPE:
+        if_type = attr.value.s32
+      if attr.id == sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_PORT_ID:
+        port_id = attr.value.oid
+      if attr.id == sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_VLAN_ID:
+        vid = attr.value.u16
+      if attr.id == sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_ADMIN_V6_STATE:
+        v6_state = attr.value.booldata
+      if attr.id == sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_ADMIN_V4_STATE:
+        v4_state = attr.value.booldata
+      if attr.id == sai_router_interface_attr.SAI_ROUTER_INTERFACE_ATTR_SRC_MAC_ADDRESS:
+        src_mac = attr.value.mac
+    return rif_id
+
+  def sai_thrift_remove_router_interface(self, rif_id):
+    rif = self.rifs.pop(rif_id, None)
+    return 0
+  
+  def sai_thrift_create_virtual_router(self, thrift_attr_list):
+    vrf_id, vrf =  CreateNewItem(self.vrfs, Vrf_obj)
+    for attr in thrift_attr_list:
+      if attr.id == sai_virtual_router_attr.SAI_VIRTUAL_ROUTER_ATTR_ADMIN_V4_STATE:
+        v4_enabled = attr.value.booldata
+        vrf.v4_enabled = v4_enabled
+      if attr.id == sai_virtual_router_attr.SAI_VIRTUAL_ROUTER_ATTR_ADMIN_V6_STATE:
+        v6_enabled = attr.value.booldata
+        vrf.v6_enabled = v6_enabled
+    return vrf_id
+
+  def sai_thrift_remove_virtual_router(self, vr_id):
+    self.vrfs.pop(vr_if, None)
+    return 0
 
 handler = SaiHandler()
 processor = switch_sai_rpc.Processor(handler)
