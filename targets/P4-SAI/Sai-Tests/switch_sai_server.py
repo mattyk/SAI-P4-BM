@@ -101,6 +101,15 @@ class Vrf_obj(Sai_obj):
         self.v6_enabled = v6_enabled
 
 
+class NextHop_obj(Sai_obj):
+    def __init__(self, id, type=0, addr_family=0, ip_addr=0, rif_id=0):
+        Sai_obj.__init__(self, id)
+        self.type = type
+        self.addr_family = addr_family
+        self.ip_addr = ip_addr
+        self.rif_id = rif_id
+
+
 class SaiHandler():
   def __init__(self):
     self.switch_id = 0
@@ -400,7 +409,35 @@ class SaiHandler():
     return vrf_id
 
   def sai_thrift_remove_virtual_router(self, vr_id):
-    self.vrfs.pop(vr_if, None)
+    self.vrfs.pop(vr_id, None)
+    return 0
+
+  def sai_thrift_create_next_hop(self, thrift_attr_list):
+    nhop_id, nhop =  CreateNewItem(self.nhops, NextHop_obj)
+    for attr in thrift_attr_list:
+      if attr.id == sai_next_hop_attr.SAI_NEXT_HOP_ATTR_TYPE
+        nhop.type = attr.value.s32
+      if attr.id == sai_next_hop_attr.SAI_NEXT_HOP_ATTR_IP
+        nhop.ip = attr.value.ipaddr
+      if attr.id == sai_next_hop_attr.SAI_NEXT_HOP_ATTR_ROUTER_INTERFACE_ID
+        nhop.rif_id = attr.value.oid
+    return nhop_id
+
+  def sai_thrift_remove_next_hop(self, nhop_id):
+    self.nhops.pop(nhop_id, None)
+    return 0
+
+  def sai_thrift_create_route(thrift_unicast_route_entry, thrift_attr_list):
+    for attr in thrift_attr_list:
+      if attr.id == sai_next_hop_attr.SAI_NEXT_HOP_ATTR_TYPE
+        nhop.type = attr.value.s32
+      if attr.id == sai_next_hop_attr.SAI_NEXT_HOP_ATTR_IP
+        nhop.ip = attr.value.ipaddr
+      if attr.id == sai_next_hop_attr.SAI_NEXT_HOP_ATTR_ROUTER_INTERFACE_ID
+        nhop.rif_id = attr.value.oid
+    return 0
+
+  def sai_thrift_remove_route(thrift_unicast_route_entry):
     return 0
 
 handler = SaiHandler()

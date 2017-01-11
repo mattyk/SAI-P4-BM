@@ -62,8 +62,9 @@ class L3IPv4SubPortRif2SubPortRif(sai_base_test.ThriftInterfaceDataPlane):
         rif_id2 = sai_thrift_create_router_interface(self.client, vr_id, rif_type, port2, vid, v4_enabled, v6_enabled, router_mac)
         print "vr_id %d ,rif1 %d, rif2 %d" % (vr_id, rif_id1, rif_id2)
         # Create next hop and route
-        # addr_family = SAI_IP_ADDR_FAMILY_IPV4
-        nhop1 = sai_thrift_create_nhop(self.client, addr_family, ip_addr1, rif_id1)
+        addr_family = sai_ip_addr_family_t.SAI_IP_ADDR_FAMILY_IPV4
+        nhop_type = sai_next_hop_type.SAI_NEXT_HOP_TYPE_IP
+        nhop1 = sai_thrift_create_nhop(self.client, nhop_type, addr_family, ip_addr1, rif_id1)
         sai_thrift_create_route(self.client, vr_id, addr_family, ip_addr1_subnet, ip_mask1, rif_id1)
 
         # send the test packet(s)

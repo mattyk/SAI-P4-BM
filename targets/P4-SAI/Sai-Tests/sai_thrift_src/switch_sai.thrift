@@ -34,9 +34,26 @@ typedef i32 sai_thrift_port_stat_counter_t
 typedef i32 sai_thrift_queue_stat_counter_t
 typedef i32 sai_thrift_pg_stat_counter_t
 
+enum sai_ip_addr_family_t {
+    SAI_IP_ADDR_FAMILY_IPV4,
+    SAI_IP_ADDR_FAMILY_IPV6
+}
+
 enum sai_switch_attr {
     SAI_SWITCH_ATTR_PORT_NUMBER,
     SAI_SWITCH_ATTR_PORT_LIST
+}
+
+enum sai_next_hop_type {
+    SAI_NEXT_HOP_TYPE_IP,
+    SAI_NEXT_HOP_TYPE_MPLS,
+    SAI_NEXT_HOP_TYPE_TUNNEL_ENCAP
+}
+
+enum sai_next_hop_attr {
+    SAI_NEXT_HOP_ATTR_TYPE,
+    SAI_NEXT_HOP_ATTR_IP,
+    SAI_NEXT_HOP_ATTR_ROUTER_INTERFACE_ID
 }
 
 enum sai_virtual_router_attr {

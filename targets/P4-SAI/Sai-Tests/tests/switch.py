@@ -267,22 +267,22 @@ def sai_thrift_remove_route(client, vr_id, addr_family, ip_addr, ip_mask, nhop):
     route = sai_thrift_unicast_route_entry_t(vr_id, ip_prefix)
     client.sai_thrift_remove_route(thrift_unicast_route_entry=route)
 
-def sai_thrift_create_nhop(client, addr_family, ip_addr, rif_id):
-    if addr_family == SAI_IP_ADDR_FAMILY_IPV4:
-        addr = sai_thrift_ip_t(ip4=ip_addr)
-        ipaddr = sai_thrift_ip_address_t(addr_family=SAI_IP_ADDR_FAMILY_IPV4, addr=addr)
-    else:
-        addr = sai_thrift_ip_t(ip6=ip_addr)
-        ipaddr = sai_thrift_ip_address_t(addr_family=SAI_IP_ADDR_FAMILY_IPV6, addr=addr)
-    nhop_attribute1_value = sai_thrift_attribute_value_t(ipaddr=ipaddr)
-    nhop_attribute1 = sai_thrift_attribute_t(id=SAI_NEXT_HOP_ATTR_IP,
-                                             value=nhop_attribute1_value)
-    nhop_attribute2_value = sai_thrift_attribute_value_t(oid=rif_id)
-    nhop_attribute2 = sai_thrift_attribute_t(id=SAI_NEXT_HOP_ATTR_ROUTER_INTERFACE_ID,
-                                             value=nhop_attribute2_value)
-    nhop_attribute3_value = sai_thrift_attribute_value_t(s32=SAI_NEXT_HOP_IP)
-    nhop_attribute3 = sai_thrift_attribute_t(id=SAI_NEXT_HOP_ATTR_TYPE,
+def sai_thrift_create_nhop(client, nhop_type, addr_family, ip_addr, rif_id):
+    nhop_attribute3_value = sai_thrift_attribute_value_t(s32=nhop_type)
+    nhop_attribute3 = sai_thrift_attribute_t(id=sai_next_hop_attr.SAI_NEXT_HOP_ATTR_TYPE,
                                              value=nhop_attribute3_value)
+    if nhop_type == sai_next_hop_type.SAI_NEXT_HOP_TYPE_IP:
+        if addr_family == sai_ip_addr_family_t.SAI_IP_ADDR_FAMILY_IPV4:
+            addr = sai_thrift_ip_t(ip4=ip_addr)
+        else:
+            addr = sai_thrift_ip_t(ip6=ip_addr)
+        ipaddr = sai_thrift_ip_address_t(addr_family=addr_family, addr=addr)
+        nhop_attribute1_value = sai_thrift_attribute_value_t(ipaddr=ipaddr)
+        nhop_attribute1 = sai_thrift_attribute_t(id=sai_next_hop_attr.SAI_NEXT_HOP_ATTR_IP,
+                                                 value=nhop_attribute1_value)
+    nhop_attribute2_value = sai_thrift_attribute_value_t(oid=rif_id)
+    nhop_attribute2 = sai_thrift_attribute_t(id=sai_next_hop_attr.SAI_NEXT_HOP_ATTR_ROUTER_INTERFACE_ID,
+                                             value=nhop_attribute2_value)
     nhop_attr_list = [nhop_attribute1, nhop_attribute2, nhop_attribute3]
     nhop = client.sai_thrift_create_next_hop(thrift_attr_list=nhop_attr_list)
     return nhop
