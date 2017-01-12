@@ -34,45 +34,27 @@ using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
 
 using boost::shared_ptr;
-//using namespace bm_runtime::standard;
 using namespace  ::switch_sai;
 
 // globals 
 const int sai_port = 9092;
 
-// move to separate file:
 
-class switch_sai_rpcHandler : virtual public switch_sai_rpcIf , public sai_object{
+class switch_sai_rpcHandler : virtual public switch_sai_rpcIf{
+
  public:
+  sai_object sai_obj;
 
   ~switch_sai_rpcHandler() {
     // deconstructor
   }
   switch_sai_rpcHandler(){
-  // initialization   
-  //
+    // initialization   
+    sai_object sai_obj();
+  
   }
-
-  
+ 
   // Your implementation goes here
-  //   auto it = std::find_if( std::begin( active_vlans ),
-  //                           std::end( active_vlans ),
-  //                           vlan_id );
-
-  //   if ( myList.end() == it )
-  //   {
-  //       std::cout << "creating vlan" << std::endl;
-  //   }
-  //   else
-  //   {
-  //       const int pos = std::distance( myList.begin(), it ) + 1;
-  //       printf("vlan id %d already exists \n",vlan_id);
-  //   }
-  // //  std::string table_name = "table_ingress_lag"; 
-  //  BmEntryHandle handle = 0;
-  
-  //  bm_client.bm_mt_delete_entry(cxt_id, table_name, handle);
-
   sai_thrift_status_t sai_thrift_set_port_attribute(const sai_thrift_object_id_t port_id, const sai_thrift_attribute_t& thrift_attr) {
     // Your implementation goes here
     printf("sai_thrift_set_port_attribute\n");
@@ -103,7 +85,7 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf , public sai_objec
       sai_status_t status = SAI_STATUS_SUCCESS;
       sai_port_api_t *port_api;
       sai_attribute_t attr;
-      status = sai_api_query(SAI_API_PORT, (void **) &port_api);
+      //status = sai_api_query(SAI_API_PORT, (void **) &port_api);
       if (status != SAI_STATUS_SUCCESS) {
           printf("sai_api_query failed!!!\n");
           return status;
@@ -113,7 +95,8 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf , public sai_objec
       sai_object_id_t s_id=0;
       uint32_t count = thrift_attr_list.size();
       sai_object_id_t port_id =1;
-      status = port_api->create_port(&port_id,s_id,count,&attr);
+      status = sai_obj.create_port(&port_id,s_id,count,&attr);
+      //status = port_api->create_port(&port_id,s_id,count,&attr);
       return status;
   }
   void sai_thrift_parse_port_attributes(const std::vector<sai_thrift_attribute_t> &thrift_attr_list, sai_attribute_t *attr_list) {
@@ -552,9 +535,7 @@ int main(int argc, char **argv) {
   TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
   printf("sai server started \n");
   server.serve();
-  
-  
   printf("thrift done\n");
-    return 0;
+  return 0;
 }
 

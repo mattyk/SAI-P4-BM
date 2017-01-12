@@ -25,7 +25,7 @@ extern "C" {
 #include "../../../../thrift_src/gen-cpp/bm/Standard.h"
 #include <thrift/protocol/TBinaryProtocol.h>
 #include <thrift/protocol/TMultiplexedProtocol.h>
-#include <thrift/transport/TBufferTransports.h>
+#include <thrift/transport/TTransportUtils.h>
 #include <thrift/transport/TSocket.h>
 
 using namespace std;
@@ -33,19 +33,20 @@ using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
 
-using boost::shared_ptr;
 using namespace bm_runtime::standard;
-//using namespace  ::switch_sai;
 
-
-const int32_t cxt_id =0;
 const int bm_port = 9090;
-
-
+const int32_t cxt_id =0;
 
 class sai_object {
 public:
-	sai_object():  //constructor pre initializations
+	boost::shared_ptr<TTransport> socket;
+  	boost::shared_ptr<TTransport> transport;
+  	boost::shared_ptr<TProtocol>  bprotocol;
+  	boost::shared_ptr<TProtocol>  protocol;
+  	StandardClient bm_client;
+	sai_object():
+	//  constructor pre initializations
 	  socket(new TSocket("localhost", bm_port)),
 	  transport(new TBufferedTransport(socket)),
 	  bprotocol(new TBinaryProtocol(transport)),
@@ -55,16 +56,34 @@ public:
 	  	uint32_t list[]={0,1,2,3,4,5,6,7};
   		switch_metatdata.hw_port_list.list=list;
   		switch_metatdata.hw_port_list.count=8;
-  		port_api.create_port  = &create_port;
+
+	  	transport->open();
+		std::string table_name = "table_accepted_frame_type"; 
+	  	BmEntryHandle handle = 0;
+	      //bm_client.bm_mt_delete_entry(cxt_id, table_name, handle);
+	  	int64_t i;
+	  	i=bm_client.bm_mt_get_num_entries(cxt_id,table_name);
+	  	printf("table has %d entries\n",i);
+    
+  
+
+  		//port_api.create_port  = &create_port;
   		// create_port2 = &create_port;
-    	transport->open();
-    	cout << "BM connection started\n"; 
+    	//transport->open();
+    	//printf("BM connection started on port %d\n",bm_port); 
 	  }
 	~sai_object(){
 	 	  //deconstructor
-    	transport->close();
-    	cout << "BM clients closed\n";
+  		transport->close();
+    	printf("BM clients closed\n");
 	 }
+
+	sai_status_t create_port (sai_object_id_t *port_id, sai_object_id_t switch_id,uint32_t attr_count,const sai_attribute_t *attr_list){
+		printf("create port, cxt_id=%d \n",cxt_id);
+		*port_id = (sai_object_id_t) 1;
+
+		return SAI_STATUS_SUCCESS;
+	}
 
 	sai_status_t sai_api_query(sai_api_t sai_api_id,void** api_method_table){
 		switch (sai_api_id) {
@@ -74,23 +93,12 @@ public:
 		return SAI_STATUS_SUCCESS;
 	}
 
-
-	sai_status_t static create_port (sai_object_id_t *port_id, sai_object_id_t switch_id,uint32_t attr_count,const sai_attribute_t *attr_list){
-		printf("bbb\n");
-		*port_id = (sai_object_id_t) 1;
-		return SAI_STATUS_SUCCESS;
-	}
 	sai_create_port_fn create_port2;
 	sai_port_api_t port_api;
-	StandardClient bm_client;
-	boost::shared_ptr<TTransport> socket;
-  	boost::shared_ptr<TTransport> transport;
-  	boost::shared_ptr<TProtocol>  bprotocol;
-  	boost::shared_ptr<TProtocol>  protocol;
 	sai_id_map_t sai_id_map;
     switch_metatdata_t switch_metatdata;  // TODO expand to array for multiple switch support
+	
 };
-
 
 
 
