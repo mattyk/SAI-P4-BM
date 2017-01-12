@@ -58,19 +58,11 @@ public:
   		switch_metatdata.hw_port_list.count=8;
 
 	  	transport->open();
-		std::string table_name = "table_accepted_frame_type"; 
-	  	BmEntryHandle handle = 0;
-	      //bm_client.bm_mt_delete_entry(cxt_id, table_name, handle);
-	  	int64_t i;
-	  	i=bm_client.bm_mt_get_num_entries(cxt_id,table_name);
-	  	printf("table has %d entries\n",i);
-    
   
 
   		//port_api.create_port  = &create_port;
-  		// create_port2 = &create_port;
-    	//transport->open();
-    	//printf("BM connection started on port %d\n",bm_port); 
+    	
+    	printf("BM connection started on port %d\n",bm_port); 
 	  }
 	~sai_object(){
 	 	  //deconstructor
@@ -82,6 +74,13 @@ public:
 		printf("create port, cxt_id=%d \n",cxt_id);
 		*port_id = (sai_object_id_t) 1;
 
+		std::string table_name = "table_accepted_frame_type"; 
+	  	BmEntryHandle handle = 0;
+	      //bm_client.bm_mt_delete_entry(cxt_id, table_name, handle);
+	  	int64_t i;
+	  	i=bm_client.bm_mt_get_num_entries(cxt_id,table_name);
+	  	printf("table has %d entries\n",i);
+    
 		return SAI_STATUS_SUCCESS;
 	}
 
@@ -93,7 +92,6 @@ public:
 		return SAI_STATUS_SUCCESS;
 	}
 
-	sai_create_port_fn create_port2;
 	sai_port_api_t port_api;
 	sai_id_map_t sai_id_map;
     switch_metatdata_t switch_metatdata;  // TODO expand to array for multiple switch support
