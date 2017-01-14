@@ -43,14 +43,14 @@ const int sai_port = 9092;
 class switch_sai_rpcHandler : virtual public switch_sai_rpcIf{
 
  public:
-  sai_object sai_obj;
+  static sai_object sai_obj;
 
   ~switch_sai_rpcHandler() {
     // deconstructor
   }
   switch_sai_rpcHandler(){
     // initialization   
-    sai_object sai_obj();
+    
   
   }
  
@@ -85,7 +85,7 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf{
       sai_status_t status = SAI_STATUS_SUCCESS;
       sai_port_api_t *port_api;
       sai_attribute_t attr;
-      //status = sai_api_query(SAI_API_PORT, (void **) &port_api);
+      status = sai_obj.sai_api_query(SAI_API_PORT, (void **) &port_api);
       if (status != SAI_STATUS_SUCCESS) {
           printf("sai_api_query failed!!!\n");
           return status;
@@ -521,7 +521,7 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf{
   }
    
 };
-
+sai_object switch_sai_rpcHandler::sai_obj = sai_object();
 
 int main(int argc, char **argv) {
   // open server to sai functions
