@@ -79,10 +79,11 @@ public:
 		switch (sai_api_id) {
             case SAI_API_PORT:
               *api_method_table=&port_api;
+              break;
          	default:
          		printf("api requested was %d, while sai_api_port is %d\n",sai_api_id,SAI_API_PORT);
-         		*api_method_table=&port_api; ///TODOOOOO remove!!
-         		//return SAI_STATUS_FAILURE; ///TODOOOOO enable!!
+         		//*api_method_table=&port_api; ///TODOOOOO remove!!
+         		return SAI_STATUS_FAILURE; ///TODOOOOO enable!!
          	}
 		return SAI_STATUS_SUCCESS;
 	}
