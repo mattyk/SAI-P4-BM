@@ -40,10 +40,10 @@ using namespace  ::switch_sai;
 const int sai_port = 9092;
 
 
-class switch_sai_rpcHandler : virtual public switch_sai_rpcIf{
+class switch_sai_rpcHandler : virtual public switch_sai_rpcIf, public sai_object{
 
  public:
-  static sai_object sai_obj;
+//  static sai_object sai_obj;
 
   ~switch_sai_rpcHandler() {
     // deconstructor
@@ -85,7 +85,7 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf{
       sai_status_t status = SAI_STATUS_SUCCESS;
       sai_port_api_t *port_api;
       sai_attribute_t attr;
-      status = sai_obj.sai_api_query(SAI_API_PORT, (void **) &port_api);
+      status = sai_api_query(SAI_API_PORT, (void **) &port_api);
       if (status != SAI_STATUS_SUCCESS) {
           printf("sai_api_query failed!!!\n");
           return status;
@@ -95,8 +95,7 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf{
       sai_object_id_t s_id=0;
       uint32_t count = thrift_attr_list.size();
       sai_object_id_t port_id =1;
-      status = sai_obj.create_port(&port_id,s_id,count,&attr);
-      //status = port_api->create_port(&port_id,s_id,count,&attr);
+      status = port_api->create_port(&port_id,s_id,count,&attr);
       return status;
   }
   void sai_thrift_parse_port_attributes(const std::vector<sai_thrift_attribute_t> &thrift_attr_list, sai_attribute_t *attr_list) {
@@ -521,7 +520,7 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf{
   }
    
 };
-sai_object switch_sai_rpcHandler::sai_obj = sai_object();
+//sai_object switch_sai_rpcHandler::sai_obj = sai_object();
 
 int main(int argc, char **argv) {
   // open server to sai functions
