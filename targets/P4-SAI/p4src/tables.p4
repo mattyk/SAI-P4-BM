@@ -11,7 +11,7 @@ table table_ingress_lag {
 
 table table_accepted_frame_type {
     reads {
-        vlan : valid;//matty prio tagged frames will have vlan valid 
+         vlan : valid;//matty prio tagged frames will have vlan valid
     }
     actions {action_set_packet_vid;}
 }
@@ -139,7 +139,7 @@ table table_fdb { // TODO ask if can be melded into l3 interface table...
     	ethernet.dstAddr		   : exact;
         ingress_metadata.bridge_id : exact;
     }
-    actions {action_set_egress_br_port;}
+    actions {action_set_egress_br_port;action_set_unknown_unicast;}
     size : FDB_TABLE_SIZE;
 }
 
@@ -151,13 +151,6 @@ table table_fdb { // TODO ask if can be melded into l3 interface table...
 //	actions{action_forward;}//action_go_to_fdb_table;}
 //}
 
-table table_unknown_unicast {
-    reads {
-        ingress_metadata.bridge_id : exact;
-    }
-    actions {action_forward;_drop;}
-    //size : 1; // TODO
-}
 //---------
 // multicast:
 //---------
@@ -202,6 +195,13 @@ table table_unknown_multicast_ipv4{
 table table_broadcast{
     reads{
       ingress_metadata.bridge_id : exact;
+    }
+    actions{action_forward_mc_set_if_list;}
+}
+
+table table_flood {
+    reads {
+        ingress_metadata.bridge_id : exact;
     }
     actions{action_forward_mc_set_if_list;}
 }
